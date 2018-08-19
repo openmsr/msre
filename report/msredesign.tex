@@ -10,7 +10,7 @@
 \usepackage[T1]{fontenc}
 
 \usepackage{graphicx}
-\usepackage[figurename=figure]{caption}
+\usepackage[figurename=figure,tablename=table]{caption}
 \usepackage[autostyle]{csquotes}
 \usepackage[style=authoryear,backend=biber]{biblatex}
 \addbibresource{msredesign.bib}
@@ -19,13 +19,13 @@
     colorlinks=true,
     linkcolor=black,
     filecolor=black,
-    urlcolor=black,
+    urlcolor=black
 }
 \urlstyle{same}
 
 
 \title{msre design}
-\author{aslak stubsgaard}
+\author{}
 \date{}
 
 
@@ -52,34 +52,13 @@ the msre core design can be seen in figure \ref{3229-fig1} and figure \ref{0378-
   \label{0378-fig1}
 \end{figure}
 
-
-\subsection{control rod and sample assembly}
-the control rod and sample assembly is further detailed in figure \ref{61246-fig14a}, \ref{61246-fig14b}, and \ref{61246-fig14c}.
-\begin{figure}[H]
+table \ref{61246-tab4} gives many of the key dimensions left out of the figures \ref{3229-fig1} and \ref{0378-fig1}.
+\begin{table}[H]
   \centering
-  \fbox{\includegraphics[page=23,width=0.8\textwidth,trim={4cm 2cm 4.8cm 2cm},clip]{./references/AD-CF-61-2-46.pdf}}
-  \caption{msre control rod arrangement \parencite[figure 14a]{ad-cf-61-2-46}.}
-  \label{61246-fig14a}
-\end{figure}
-% \begin{figure}[H]
-%   \fbox{\includegraphics[page=10,width=0.8\textwidth,trim={3cm 9.5cm 3.5cm 8cm},clip]{./references/ORNL-TM-0378.pdf}}
-%   \caption{msre control rod arrangements and typical fuel channels \parencite[figure 2]{ornl-tm-0378}.}
-%   \label{0378-fig2}
-% \end{figure}
-
-\begin{figure}[H]
-  \centering
-  \fbox{\includegraphics[page=24,width=0.8\textwidth,trim={2.5cm 2cm 2.5cm 2.5cm},clip]{./references/AD-CF-61-2-46.pdf}}
-  \caption{vertical section-poison control rod \parencite[figure 14b]{ad-cf-61-2-46}.}
-  \label{61246-fig14b}
-\end{figure}
-
-\begin{figure}[H]
-  \centering
-  \fbox{\includegraphics[page=25,width=0.8\textwidth,trim={2.5cm 2cm 2cm 1.5cm},clip]{./references/AD-CF-61-2-46.pdf}}
-  \caption{msre control system \parencite[figure 14c]{ad-cf-61-2-46}.}
-  \label{61246-fig14c}
-\end{figure}
+  \caption{reactor vessel design data \parencite[table 4]{ad-cf-61-2-46}.}
+  \fbox{\includegraphics[page=11,width=0.8\textwidth,trim={2cm 3.5cm 2cm 3.5cm},clip]{./references/AD-CF-61-2-46.pdf}}
+  \label{61246-tab4}
+\end{table}
 
 
 \subsection{graphite rods}
@@ -103,6 +82,38 @@ the arangement of the graphite rods are detailed in figure \ref{4174-p10-p11}
   \caption{reactor core block assembly plan, drawing D-BB-B-40416 \parencite[page 10-11]{ornl-tm-4174}.}
   \label{4174-p10-p11}
 \end{figure}
+
+% \begin{table}[H]
+%   \centering
+%   \caption{properties of msre core graphite \parencite[table 3]{ad-cf-61-2-46}.}
+%   \fbox{\includegraphics[page=9,width=0.8\textwidth,trim={2cm 4cm 2cm 3.4cm},clip]{./references/AD-CF-61-2-46.pdf}}
+%   \label{61246-tab3}
+% \end{table}
+
+
+\subsection{control rod and sample assembly}
+the control rod and sample assembly is further detailed in figure \ref{61246-fig14a}, \ref{61246-fig14b}, and \ref{61246-fig14c}.
+\begin{figure}[H]
+  \centering
+  \fbox{\includegraphics[page=23,width=0.8\textwidth,trim={4cm 2cm 4.8cm 2cm},clip]{./references/AD-CF-61-2-46.pdf}}
+  \caption{msre control rod arrangement \parencite[figure 14a]{ad-cf-61-2-46}.}
+  \label{61246-fig14a}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \fbox{\includegraphics[page=24,width=0.8\textwidth,trim={2.5cm 2cm 2.5cm 2.5cm},clip]{./references/AD-CF-61-2-46.pdf}}
+  \caption{vertical section-poison control rod \parencite[figure 14b]{ad-cf-61-2-46}.}
+  \label{61246-fig14b}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \fbox{\includegraphics[page=25,width=0.8\textwidth,trim={2.5cm 2cm 2cm 1.5cm},clip]{./references/AD-CF-61-2-46.pdf}}
+  \caption{msre control system \parencite[figure 14c]{ad-cf-61-2-46}.}
+  \label{61246-fig14c}
+\end{figure}
+
 
 
 \printbibliography
