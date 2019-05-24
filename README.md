@@ -11,3 +11,7 @@ the work-in-progress cad model can be [here](https://cad.onshape.com/documents/4
 ---
 
 please contact [me](https://github.com/aslakstubsgaard) if you want to contribute.
+
+---
+
+this work and the cad model is under the GNU General Public License v3.0
