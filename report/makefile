@@ -19,4 +19,4 @@ all: $(out)
 
 .PHONY: clean
 clean:
-	rm --force *.log *.aux *.out *.bbl *.bcf *.blg *.xml
+	rm --force *.log *.aux *.out *.bbl *.bcf *.blg *.xml *.fdb_latexmk *.fls *.toc

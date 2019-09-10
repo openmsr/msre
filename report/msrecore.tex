@@ -1,12 +1,14 @@
-\documentclass{article}
-\usepackage{geometry}
-\geometry{paperwidth=170mm,
-          paperheight=2500mm,
-          top=20mm,
-          bottom=20mm
-          }
+\documentclass[ms,a4paper]{memoir}
+\chapterstyle{dash}
+\usepackage{ulem}
+\usepackage{xcolor}
+\usepackage[a4paper]{geometry}
 \usepackage{float}
 
+\renewcommand{\thesection}{\arabic{section}}
+\maxtocdepth{subsection}
+\counterwithout{figure}{chapter}
+\counterwithout{table}{chapter}
 
 \usepackage[english]{babel}
 \usepackage{libertine}
@@ -32,23 +34,28 @@
 \newcommand*{\mrsarchive}{../../msr-archive}%
 
 
-
-\title{msre core}
-\author{}
+\title{msre reactor design}
+\author{openmsr}
 \date{}
-
+\pagestyle{empty}
+\addtocontents{toc}{\protect\thispagestyle{empty}}
 
 \begin{document}
 \maketitle
 
-\section{introduction}
+\vspace{-4cm}
+\renewcommand{\contentsname}{contents}
+\tableofcontents*
+
+
+\section{\emph{introduction}}
 the design and dimensions of the molten salt reactor experiment is detailed in several ornl reports. this document aims at providing a comprehensive overview of the core design, dimensions, and materials, for the purpose of creating an accurate cad model of the reactor core. \\
 
 care is taken to give proper references to the original data, figure, tables, etc. likewise, any quantity or feature laking documentation or reference not yet found will be estimated or extrapolated from the available information.
 
 
 
-\section{msre core}
+\section{\emph{overview}}
 an isometric view of the msre core can be seen in figure \ref{3229-fig1}
 \begin{figure}[H]
   \centering
@@ -98,14 +105,14 @@ the arangement of the graphite stringers are detailed in figure \ref{4174-p10-p1
   \label{4174-p10-p11}
 \end{figure}
 
-\section{core vessel}
-\subsection{lower and upper vessel plenum}
+\section{\emph{core vessel}}
+\subsection{\emph{lower and upper vessel plenum}}
 \textcite[page 14]{ornl-tm-3229} states about the lower vessel plenum:
 \enquote{\textit{the lower plenum of the core vessel is formed by a standard 60 in. od asme flanged and dished head}} and \textcite[page 25]{ornl-tm-3229} states about the upper vessel plenum:
 \enquote{\textit{the reactor vessel upper plenum is similar to the lower plenum in that it is forme from a standard asme flanged and dished head}}.
 
 
-\subsection{flow distributor and annulus}
+\subsection{\emph{flow distributor and annulus}}
 \textcite[page 112 and 114]{ornl-tm-3039} states about the annulus:
 \enquote{\textit{the fuel salt entered the flow distributor where it was directed downward around the circumference of the vessel. it flowed in a spiral path through a 1-in. annulus between the vessel wall and the core can for cooling purposes.}}. \enquote{\textit{to prevent possible overheating in an otherwise stagnant region, a small portion of salt entering the reactor was diverted into the region just above the core can support flange in the annulus between the vessel and the core can}}.
 this is depicted in figure \ref{0728-p109-p110}. \\
@@ -115,7 +122,7 @@ this is depicted in figure \ref{0728-p109-p110}. \\
 
 note that this is in oppositon to the inlet diameter given in table \ref{61246-tab4}.
 
-\subsubsection{flow distributor orifices}
+\subsubsection{\emph{flow distributor orifices}}
 \textcite[page 9-10]{ornl-tm-3229} states about the flow distributor orifices:
 \enquote{\textit{one characteristic of this type of volute is the variable static pressure around it; therefore, in order to obtain a uniform angular flow distribution, it is necessary to use orifices between the volute and core wall cooling annulus. the orifices are 3/4 in. and occur in stacks of 3. at the head end of the volute the orifice stacks are 5 deg apart. at the tail end of the volute, because of the lower fuel velocity and resulting higher static pressure, the orifice stack spacing is increased to 22 1/2 deg. this orifice distribution was determined from the 1/5 scale model. the orifice holes are drilled at an angle of 30 deg with the tangent in order to maintain a tangential velocity component in the annulus. the resulting high heat transfer coeffficients cool the core vessel wall and the reactor core can}}.
 
@@ -167,7 +174,7 @@ from this information we can approximate the angular distribution of the orifice
   \end{tabular}
 \end{figure}
 
-\subsubsection{bypass flow, core support lugs and flange}
+\subsubsection{\emph{bypass flow, core support lugs and flange}}
 \parencite[page 85]{ornl-tm-0728} states about the bypass:
 \enquote{\textit{to prevent possible overheating in a region that might otherwise have been stagnant, about 24 gpm of salt entering the reactor is diverted into the region just above the core-can support flange in the annulus between the pressure vessel and the core can. this is accomplished through 18 slots or channels, 0.2 by 0.2 in., cut in the core-can flange. these slots are machined at an angle of $30^\circ$ to promote better mixing in the region. in addition, a by-pass flow of 3-22 gpm of salt will pass through the annular clearances at the core can support ring}}.
 
@@ -195,7 +202,7 @@ from this information we can approximate the angular distribution of the orifice
   \label{3626-fig1-3}
 \end{figure}
 
-\subsection{anti-swirl vanes}
+\subsection{\emph{anti-swirl vanes}}
 \textcite[page 14]{ornl-tm-3229} states about the anti-swirl vanes:
 \enquote{\textit{the anti-swirl vanes consist of 48 plates starting about 2 in. up in the core wall cooling annulus and extending along radial lines into the lower head for about 38\% of the radial distance to the core centerline. they are slightly elevated of the core vessel wall, thus eliminating as much coner area as possible where settled solids could accumulate.}}. \\
 
@@ -228,7 +235,7 @@ figure \ref{3229-fig9} shows a schematized cross section view of the reactor and
 % \textcolor{cyan}{still unknown are the curves on the lower side of the anti-swirl vanes, seen in figure \ref{3229-fig1-zoom-strainer} and the thichness of the anti-swirl vanes.}
 
 
-\subsection{vessel drain}
+\subsection{\emph{vessel drain}}
 \label{sec:drain}
 \textcite[page 14-15]{ornl-tm-3229} states about the the two drain lines:
 \enquote{\textit{the vessel drain consist of a short section of 1 1/2 in. pipe extending slightly up into the vessel head at the centerline, and having a conical umbrella over it. in addition it incorporates a secondary drain with is a 1/2 in. contentric tube coming up the middel of the primary drain, penetrating through the drain pipe wall just inside the vessel and wrapping around the drain pipe horizontally about $90^\circ$}}.
@@ -242,7 +249,7 @@ figure \ref{3229-fig9} shows a schematized cross section view of the reactor and
 %% \textcolor{cyan}{still unknown is length of both pipes protrusion into the vessel and the angle and size of the umbrella and how it attaches to the drain pipe. furthermore, the pipes and umbrella wall thickness is unknown.}
 
 
-\subsection{grid support plates}
+\subsection{\emph{grid support plates}}
 \parencite[page 20]{ornl-tm-3229} states about the grid support structure:
 \enquote{\textit{in flowing through the reactor moderator assembly, fuel first passes through a moderator support structure and then through the moderator core blocks. the support structure consists of two assemblies, the lower of which is a hastelloy-n cross structure ... which is the main support structure for the graphite}}.
 
@@ -263,7 +270,6 @@ figure \ref{3229-fig9} shows a schematized cross section view of the reactor and
 
 \begin{figure}[H]
   \centering
-  \centering
   \fbox{\includegraphics[page=165,width=0.8\textwidth,trim={4cm 5.5cm 4cm 2.25cm},clip]{\mrsarchive/docs/ORNL-4676.pdf}}
   \caption{comparison of the bottom positioning stud on the graphite moderator element when initially installed in the msre and after operation \parencite[figure 13.3]{ornl-4676}.}
   \label{4676-fig13-3}
@@ -272,7 +278,7 @@ figure \ref{3229-fig9} shows a schematized cross section view of the reactor and
 %% \textcolor{cyan}{still unknown many of the key dimensions and positions. we e.g. see holes for the hold-down rods in the zoomed image above which is not even mentioned.}
 
 
-\subsection{vessel outlet}
+\subsection{\emph{vessel outlet}}
 \parencite[page 84-85]{ornl-tm-0728} states about the vessel outlet:
 \enquote{\textit{the salt leaves the reactor core and flows through the upper head to the 10-in. nozzle opening. it is diverted through a 5-in. opening in the side of the nozzle to flow to the fuel circulating pump. the 10-in. nozzle also serves as an access port and support for the tree control rods and for taking and placing of the four graphite-sample rods in the core matrix}}.
 
@@ -300,16 +306,37 @@ figure \ref{3229-fig9} shows a schematized cross section view of the reactor and
 
 \begin{figure}[H]
   \centering
-  \fbox{\includegraphics[page=87,width=0.8\textwidth,trim={3cm 4cm 3.75cm 3cm},clip]{\mrsarchive/docs/ORNL-3708.pdf}}
-  \caption{complete control rod thimble assembly \parencite[figure 44]{ornl-3708}.}
+  \fbox{\includegraphics[page=145,width=0.8\textwidth,trim={4cm 5cm 4cm 3cm},clip]{\mrsarchive/docs/ORNL-TM-0728.pdf}}
+  \caption{control rod and drive assembly \parencite[figure 5.14]{ornl-tm-0728}.}
   % \label{3708-fig40}
 \end{figure}
+
+% figure \ref{0728-p111-p112} shows a section view of the msre core
+\begin{figure}[H]
+  \centering
+  \fbox{
+  \begin{tabular}{c}
+    \includegraphics[page=111,width=0.8075\textwidth,trim={2.5cm 0.04cm 2.5cm 10cm},clip]{\mrsarchive/docs/ORNL-TM-0728.pdf}\\[-0.12cm]
+    \includegraphics[page=112,width=0.8\textwidth,trim={2.64cm 31cm 2.5cm 0.04cm},clip]{\mrsarchive/docs/ORNL-TM-0728.pdf}
+  \end{tabular}
+  }
+  \caption{elevation of cotnrol rod drive housings \parencite[page 111-112]{ornl-tm-0728}.}
+  \label{0728-p111-p112}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \fbox{\includegraphics[page=87,width=0.8\textwidth,trim={3cm 4cm 3.75cm 3cm},clip]{\mrsarchive/docs/ORNL-3708.pdf}}
+  \caption{reactor completed and ready for shipment to msre site \parencite[figure 44]{ornl-3708}.}
+  % \label{3708-fig40}
+\end{figure}
+
 
 
 \parencite[page 104]{ornl-tm-0728} states about the vessel outlet:
 \enquote{\textit{the 10-in. nozzle through which the salt leaves the upper head of the reactor vessel has a 40-in.-long extension welded above it. this extension has a 5-in. side outlet for the leaving salt. the extension serves as a housing for the nozzle plug, which is a removable support for the three 2-in. control rod thimbles, the 2-1/2-in. graphite sample access pipe, and for the discharge screen}}.
 
-\subsubsection{removable nozzle plug}
+\subsubsection{\emph{removable nozzle plug}}
 \parencite[page 104-105]{ornl-tm-0728} states about the removable nozzle plug:
 \enquote{\textit{the removable nozzle plug is about 20-1/2 in. long and is 9.770 in od at the top and 9.520 in. od at the bottom to provide a taper to assist in freeing the plug for removal. the radial clearance is 1/8 in. at the top and 1/4 in. at the bottom. fuel salt is frozen in the annular space between the plug and the nozzle, to effect a salt seal. the salt maintained below the freezing temperature by cooling the outside of the nozzle extension and the inside of the plug with a flow of cell atmosphere gas}}.
 \enquote{\textit{the salt seal prevents the salt from coming in contact with and corroding the ring-joint gas seal on the upper flange}}.
@@ -324,7 +351,7 @@ figure \ref{3229-fig9} shows a schematized cross section view of the reactor and
   \label{3039-fig5-10}
 \end{figure}
 
-\subsubsection{outlet strainer}
+\subsubsection{\emph{outlet strainer}}
 \textcite[page 24-26]{ornl-tm-3229} states about the outlet strainer:
 \enquote{\textit{after the model was built, a strainer structure ... was added to the reactor outlet design which penetrated down into the upper plenum. its purpose was to catch graphite chips (graphite floats in fuel salt) should they break loose from the moderator. this device was not installed in the model but it would not be expected to incluence the flow significantly}}. \\
 
@@ -340,14 +367,14 @@ figure \ref{3229-fig9} shows a schematized cross section view of the reactor and
 \end{figure}
 
 \textcite[page 115]{ornl-tm-3039} states about the outlet strainer:
-\enquote{\textit{stainers were provided at the reactor outlet to prevent passage of graphite chips larger then 1/16 in. a strainer basket was attached to the lower end of the 10-in. nozzle plug and extended downward into the upper head region of the reactor vessel. the three control rod timbles and the graphite sample assembly passed through the stainer basket. since the five graphite elements were not pinned as were the remaining moderator elements, a cross-shaped extension of the basket essembly projected beneath the basket to provide a hold-down}}. this is depicted in figure \ref{3039-fig5-11}. \\
+\enquote{\textit{stainers were provided at the reactor outlet to prevent passage of graphite chips larger then 1/16 in. a strainer basket was attached to the lower end of the 10-in. nozzle plug and extended downward into the upper head region of the reactor vessel. the three control rod thimbles and the graphite sample assembly passed through the stainer basket. since the five graphite elements were not pinned as were the remaining moderator elements, a cross-shaped extension of the basket essembly projected beneath the basket to provide a hold-down}}. this is depicted in figure \ref{3039-fig5-11}. \\
 
 
 \parencite[page 105]{ornl-tm-0728} states about the removable nozzle plug:
 \enquote{\textit{the upper head of the reactor vessel has an 18-in.-diam strainer ring mounted just below the discharge nozzle opening... this ring is welded to six equally spaced lugs and to a strengthening ring. the strainer is fabricated of 16-gage inor-8 plate with staggered 3/32-in.-diam holes on 9/64-in. centers, and will stop large graphite chips. the center of the strainer ring is cut away to permit the 9.52-in.-od strainer-basket assembly on the nozzle plug to pass through it. an inor-8 seal ring, 1/4 in. by 3/4 in. wide, 9.583 in. id and 11.083 in. od, is loosely mounted with the strainer ring and makes an acceptable close fit with the strainer basket}}.
 \enquote{\textit{the lower end of the nozzle plug is contoured to direct the fuel salt stream towards the 5-in. side outlet. prejecting below this is a 9.520-in.-diam by 12-17/32-in.-long cylinder of 1/8-in.-thick plate for supporting the strainer basket. the basket is welded to the bottom of the cylinder, is 9.520 in. od at the top and about 8-1/2-in. od at the bottom and is about 7 in. deep. the holes in the basket strainer are of the same size and configuration as those in the strainer ring, mentioned above. the three inor-8 graphite sampler baskets... pass through a 2-3/8 in. diam opening in the strainer basket. the three 2-in.-diam control rod thimbles also pass through the strainer basket. a cross-shaped extension of the basket assembly projects beneath the basket about 2-1/2 in. to act as a hold-down for the five full-sized graphite stringer samples at the center of the reactor core. all clearances between the strainer basket and the strainer ring, thimbles, etc., are less than 1/16 in. so that the graphite chips will be retained}}.
 
-\section{graphite can}
+\section{\emph{graphite can}}
 the msre used a graphite moderator consisting of an assembly of graphite stringer with control rods and removable samples rods in the center. bellow is seen the assembly of the can without the removable rods at the center.
 \begin{figure}[H]
   \centering
@@ -381,7 +408,7 @@ the msre used a graphite moderator consisting of an assembly of graphite stringe
   \label{4676-fig1-6}
 \end{figure}
 
-\subsection{typical graphite stringer}
+\subsection{\emph{typical graphite stringer}}
 a typical graphite stringers, along with a removable graphite stringer, is given in figure \ref{3229-fig2}
 \begin{figure}[H]
   \centering
@@ -399,7 +426,7 @@ a typical graphite stringers, along with a removable graphite stringer, is given
   % \label{3419}
 \end{figure}
 
-\subsubsection{dowel section}
+\subsubsection{\emph{dowel section}}
 the dowel at the bottom consists of two section dowel (long slim part and stumpy thick part) seen below.
 \begin{figure}[H]
   \centering
@@ -425,7 +452,7 @@ the dowel at the bottom consists of two section dowel (long slim part and stumpy
 % \parencite[page 84-85]{ornl-tm-0728}.
 %% \textcolor{cyan}{thus, it's assumed that: the dowel disk is 3/4 in in diameter and 1/2 in. in length, the dowel is 1 in. in diameter and 3 1/2 in in length, and the hold-down rod hole is 3 in. from the top of the dowel.}
 
-\subsection{hold-down rods and support wires}
+\subsection{\emph{hold-down rods and support wires}}
 \label{sec:hold-down-rods-support-wires}
 \parencite[page 84-85]{ornl-tm-0728} states about the hold-down rods and support wires:
 \enquote{\textit{a 5/16-in.-diam inor-8 rod passes through a 0.010-in.-wall-thichness bushing placed in a 0.375-in.-diam hole in the dowel section at the bottom of each graphite stringer. these rods also pass through the inor-8 grid-supporting structure and prevent each graphite stringer from floating in the fuel salt. if a graphite stringer were to break in two, the top partion would tend to float away and leave a relatively stagnant pocket of fuel salt which might reach a higher temperature than desired. the effect of this on the reactivity and on the temperatures in the reactor has been studied. to guard against this eventuality, a 1/16-in.-diam inor-8 wire is passed through a 1/8-in.-diam inor-8 insert about 1 in from the top of each graphite stringer, fastening the tops together and to the core can}}.
@@ -441,7 +468,7 @@ the dowel at the bottom consists of two section dowel (long slim part and stumpy
 figure \ref{0728-p109-p110} gives the orientation of the holes in the stringer hold-down rods relative to the core outlet, that being orthogonal, which is in agreement with figure \ref{3229-fig1}.
 
 
-\subsection{graphite lattice blocks}
+\subsection{\emph{graphite lattice blocks}}
 \parencite[page 20]{ornl-tm-3229} states about the lattice blocks: \enquote{\textit{resting on the this}(grid support plates)\textit{ is a grid consisting of two layers of rectangular graphite bars, one layer resting on the other and perpendicular to it. the purpose of the graphite assembly is to position and hold the graphite core blocks, and to compensate for a difference in thermal expansion between the hastelloy n and graphite}}.
 
 \parencite[page 79 and 81]{ornl-tm-0728} states about the lattice blocks: \enquote{\textit{when not buoyed up by being immersed in the fuel salt, the vertical graphite stringers rest on a lattice of graphite blocks, about 1 by 1-5/8 in. in cross section, laid horizontally in two layers at right angles to each other (see ornl dwg. d-bb-b-40420). holes in the lattice blocks, with $4^8-30'$ taper and 1.040 in. in smallest diameter, accept the 1.000-in.-diam doweled section at the lower end of each stringer with sufficient clearance to allow both angular and lateral displacement. the upper horizantal surfaces of the graphite lattice bars and stringers are tapered so that salt will not stand on them after a reactor drain}}.
@@ -455,7 +482,7 @@ figure \ref{0728-p109-p110} gives the orientation of the holes in the stringer h
 
 %% \textcolor{cyan}{it can be seen that the graphite stringers sits on top of horizontal graphite lattice blocks, which is also depicted in figure \ref{0728-p109-p110}, but details are lacking.}
 
-\subsection{removable graphite stringer}
+\subsection{\emph{removable graphite stringer}}
 \parencite[page 84]{ornl-tm-0728} states about the removable graphite stringer:
 \enquote{\textit{the five graphite stringers at the center of the core can be removed, although with considerable more difficulty}}.
 see figure \ref{0728-fig5-7}.
@@ -483,14 +510,14 @@ see the figure \ref{3229-fig2}.
   \centering
   \centering
   \fbox{\includegraphics[page=164,width=0.8\textwidth,trim={3.5cm 11.5cm 2cm 3.5cm},clip]{\mrsarchive/docs/ORNL-4676.pdf}}
-  \caption{... \parencite[figure 13.2]{ornl-4676}.}
+  \caption{photograph of the top of the graphite moderator element, showing the crack originating at the INOR-8 lifting stud and extending partway around the graphite block shown by the short arrows. The long arrow indicates the same channel in the different views \parencite[figure 13.2]{ornl-4676}.}
   \label{4676-fig13-2}
 \end{figure}
 
 
-% \subsection{tall graphite stringers}
+% \subsection{\emph{tall graphite stringers}
 
-\subsection{core centering grid or graphite centering bridge}
+\subsection{\emph{core centering grid or graphite centering bridge}}
 \parencite[page 84-85]{ornl-tm-0728} states about the core centering grid:
 \enquote{\textit{at the top of the graphite blocks a centering bridge holds a row of stringers in position on two diameters at right angles to each other. this bridge helps to prevent shifting of the entire stringer assembly (see ornl dwg. d-bb-b-40424)}}.
 \begin{figure}[H]
@@ -509,17 +536,26 @@ see the figure \ref{3229-fig2}.
   \label{4676-fig1-4}
 \end{figure}
 
-\subsection{restrictor ring}
+\subsection{\emph{restrictor ring}}
 \parencite[page 84-85]{ornl-tm-0728} states about the restrictor ring:
 \enquote{\textit{to prevent an excessive amount of salt flow in the annuluar space thus created, an inor-8 restrictor ring, 1/2 x 1/2 x 54-1/2 in. id. surrounds the bundle of graphite stringers at the bottom (see ornl dwg. d-bb-b-40427). the stringers are restrained from excessive movement at the top by a graphite retainer ring, 1 x 2 x 53-1/4 in. id. this ring, in turn, is held in place by an inor-8 retainer ring, 3/4 x 3/4 x 53-1/4 in. id (see ornl dwg. d-bb-b-40428 for both rings)}}.
 
-\subsection{core can}
+\subsection{\emph{core can}}
 \parencite[page 79]{ornl-tm-0728} states about the core can:
 \enquote{\textit{the core can, or shell, is 55-1/2 in. ID and 67-15/16 in. high and was rolled from 1/4-in.-thick INOR-8 plate.}}
 
 
-\section{control stringer and sample assembly}
+\section{\emph{control stringer and sample assembly}}
 the control stringer and sample assembly is further detailed in figure \ref{61246-fig14a}, \ref{61246-fig14b}, and \ref{61246-fig14c}.
+
+figure \ref{61246-fig14a} depicts what seems to be a early design of the stringer arrangement
+\begin{figure}[H]
+  \centering
+  \fbox{\includegraphics[page=23,width=0.8\textwidth,trim={4cm 2cm 4.8cm 2cm},clip]{\mrsarchive/docs/ORNL-CF-61-2-46-AD.pdf}}
+  \caption{msre control stringer arrangement \parencite[figure 14a]{ad-cf-61-2-46}.}
+  \label{61246-fig14a}
+\end{figure}
+later in 1965 figure \ref{0728-fig5-7} give the stringer arrangement
 \begin{figure}[H]
   \centering
   \fbox{\includegraphics[page=117,width=0.8\textwidth,trim={2.7cm 5.5cm 3.1cm 4.2cm},clip,angle=0.4]{\mrsarchive/docs/ORNL-TM-0728.pdf}}
@@ -544,21 +580,113 @@ the control stringer and sample assembly is further detailed in figure \ref{6124
       \includegraphics[page=119,height=0.50\textwidth,trim={0cm 4.4cm 33cm 3cm},clip,angle=-90]{\mrsarchive/docs/ORNL-TM-0728.pdf}
     \end{tabular}
   }
-  \caption{graphite-inor-8 sample assembly \parencite[figure 5.8]{tm-0728}.}
+  \caption{graphite-inor-8 sample assembly \parencite[figure 5.8]{ornl-tm-0728}.}
   \label{0728-fig5-8}
 \end{figure}
 
-\parencite[page 84]{ornl-tm-0728} states about the center stringers:
-\enquote{\textit{in addition to the graphite samples in the baskets, the five graphite stringers at the center of the core can be removed, although with considerable more difficulty}}, the location of these stringers is indicated in figure \ref{0728-fig5-7}.
-\enquote{\textit{the five stringers are of a special design (types 7, 60, and 61 on ornl dwgs d-bb-b-40416, 40418 and 40581). they are 2-in. x 2-in. in cross section but are 64-1/2 in. long rather than the 62-1/8 in. of the average stringer. they do not have the dowel section at the bottom and the hole for the hold-down rods and they rest directly on the inor-8 supporting grid rather than on the graphite lattice blocks. the lattice blocks do not extend across the five stringer locations, the opening thus provided through the blocks permitting insertion of a viewing device through the core to permit observation of the lower head should this prove desirable.}}
+
+% \begin{figure}[H]
+%   \centering
+%   \centering
+%   \fbox{\includegraphics[page=130,width=0.8\textwidth,trim={3.8cm 3.7cm 3.5cm 2.5cm},clip,angle=0.25]{\mrsarchive/docs/ORNL-TM-3039.pdf}}
+%   \caption{earlier design of msre surveillance facility inside reactor vessel \parencite[figure 5.14]{ornl-tm-3229}.}
+%   \label{3039-fig5-11}
+% \end{figure}
 
 
 \begin{figure}[H]
   \centering
-  \fbox{\includegraphics[page=23,width=0.8\textwidth,trim={4cm 2cm 4.8cm 2cm},clip]{\mrsarchive/docs/ORNL-CF-61-2-46-AD.pdf}}
-  \caption{msre control stringer arrangement \parencite[figure 14a]{ad-cf-61-2-46}.}
-  \label{61246-fig14a}
+  \centering
+  \fbox{\includegraphics[page=107,width=0.8\textwidth,trim={4cm 22cm 1.5cm 5cm},clip,angle=0.25]{\mrsarchive/docs/ORNL-3872.pdf}}
+  \caption{three stringers (s, r, and l) of cgb graphite and inor-8 surveillance specimens \parencite[figure 4.7]{ornl-3872}.}
+  % \label{3039-fig5-11}
 \end{figure}
+
+\begin{figure}[H]
+  \centering
+  \centering
+  \fbox{\includegraphics[page=107,width=0.8\textwidth,trim={4cm 8cm 1.5cm 11cm},clip]{\mrsarchive/docs/ORNL-3872.pdf}}
+  \caption{inor-8 and grade cgb graphite surveillance specimens and container basket \parencite[figure 4.8]{ornl-3872}.}
+  % \label{3039-fig5-11}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \centering
+  \fbox{\includegraphics[page=108,width=0.8\textwidth,trim={2.5cm 13.5cm 3.2cm 5cm},clip]{\mrsarchive/docs/ORNL-3872.pdf}}
+  \caption{one stringer of control specimens of inor-8 and grade cgb graphite \parencite[figure 4.9]{ornl-3872}.}
+  % \label{3039-fig5-11}
+\end{figure}
+
+% \begin{figure}[H]
+%   \centering
+%   \centering
+%   \fbox{\includegraphics[page=73,width=0.8\textwidth,trim={4.8cm 15cm 3.5cm 2.8cm},clip]{\mrsarchive/docs/ORNL-3936.pdf}}
+%   \caption{control rod drive units in operation position at msre \parencite[figure 2.1]{ornl-3936}.}
+%   % \label{3039-fig5-11}
+% \end{figure}
+
+\begin{figure}[H]
+  \centering
+  \centering
+  \fbox{\includegraphics[page=209,width=0.8\textwidth,trim={4.5cm 5cm 3cm 2.5cm},clip]{\mrsarchive/docs/ORNL-4191.pdf}}
+  \caption{msre core specimens after run 11. (a) control (b) exposed to salt (c) exposed to salt and radiation in the msre \parencite[figure 16.2]{ornl-4191}.}
+  % \label{3039-fig5-11}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \centering
+  \fbox{\includegraphics[page=37,width=0.8\textwidth,trim={3.2cm 19cm 2cm 2.8cm},clip]{\mrsarchive/docs/ORNL-4449.pdf}}
+  \caption{irradiation-specimen array installed in msre core july 31, 1969 \parencite[figure 1.13]{ornl-4449}.}
+  % \label{3039-fig5-11}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \centering
+  \fbox{\includegraphics[page=188,width=0.8\textwidth,trim={2cm 11cm 3cm 2.8cm},clip]{\mrsarchive/docs/ORNL-4449.pdf}}
+  \caption{msre surveillance specimens of graphite and hastelloy n removed after run 18 (stringers rs4, rr3 and rl2) \parencite[figure 16.1]{ornl-4449}.}
+  % \label{3039-fig5-11}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \centering
+  \fbox{\includegraphics[page=16,width=0.8\textwidth,trim={2cm 9.5cm 3cm 4cm},clip]{\mrsarchive/docs/ORNL-TM-3884.pdf}}
+  \caption{msre core surveillance specimens and cross section of flow geometry \parencite[figure 2.4]{ornl-tm-3884}.}
+  % \label{3039-fig5-11}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \centering
+  \fbox{\includegraphics[page=106,width=0.8\textwidth,trim={2cm 12.5cm 3cm 5cm},clip]{\mrsarchive/docs/ORNL-3872.pdf}}
+  \caption{msre core surveillance specimens and cross section of flow geometry \parencite[figure 4.6]{ornl-3872}.}
+  % \label{3039-fig5-11}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \centering
+  \fbox{\includegraphics[page=74,width=0.8\textwidth,trim={4cm 16.5cm 5cm 2.5cm},clip]{\mrsarchive/docs/ORNL-4865.pdf}}
+  \caption{msre core surveillance specimens and cross section of flow geometry \parencite[figure 9.4]{ornl-4865}.}
+  % \label{3039-fig5-11}
+\end{figure}
+
+% \begin{figure}[H]
+%   \centering
+%   \centering
+%   \fbox{\includegraphics[page=82,width=0.8\textwidth,trim={10cm 4cm 14.7cm 17.4cm},clip]{\mrsarchive/docs/ORNL-4865.pdf}}
+%   \caption{msre core surveillance specimens and cross section of flow geometry \parencite[figure 9.7]{ornl-4865}.}
+%   % \label{3039-fig5-11}
+% \end{figure}
+
+"Finally,the entire sample assembly is enclosed in a perforated basket."
+
+\parencite[page 84]{ornl-tm-0728} states about the center stringers:
+\enquote{\textit{in addition to the graphite samples in the baskets, the five graphite stringers at the center of the core can be removed, although with considerable more difficulty}}, the location of these stringers is indicated in figure \ref{0728-fig5-7}.
+\enquote{\textit{the five stringers are of a special design (types 7, 60, and 61 on ornl dwgs d-bb-b-40416, 40418 and 40581). they are 2-in. x 2-in. in cross section but are 64-1/2 in. long rather than the 62-1/8 in. of the average stringer. they do not have the dowel section at the bottom and the hole for the hold-down rods and they rest directly on the inor-8 supporting grid rather than on the graphite lattice blocks. the lattice blocks do not extend across the five stringer locations, the opening thus provided through the blocks permitting insertion of a viewing device through the core to permit observation of the lower head should this prove desirable.}}
 
 \begin{figure}[H]
   \centering
@@ -611,13 +739,13 @@ the control stringer and sample assembly is further detailed in figure \ref{6124
   \caption{control rod thimble \parencite[figure 2.5]{ornl-3529}.}
   % \label{3708-fig40}
 \end{figure}
+note that we see no signs of the 'hangers' which leads to the conclusion that these were removed and instead welded to the nozzle. similar the flange seems not to be included in the final assembly.
 
 \begin{figure}[H]
   \centering
-  \centering
-  \fbox{\includegraphics[page=130,width=0.8\textwidth,trim={3.8cm 3.7cm 3.5cm 2.5cm},clip,angle=0.25]{\mrsarchive/docs/ORNL-TM-3039.pdf}}
-  \caption{msre surveillance facility inside reactor vessel \parencite[figure 5.14]{ornl-tm-3229}.}
-  \label{3039-fig5-11}
+  \fbox{\includegraphics[page=171,width=0.8\textwidth,trim={1.5cm 18cm 3cm 2.5cm},clip]{\mrsarchive/docs/ORNL-4676.pdf}}
+  \caption{portion of hastelloy n control rod thimble with spacer sleevesn \parencite[figure 13.10]{ornl-4676}.}
+  \label{4676-fig13-10}
 \end{figure}
 
 
