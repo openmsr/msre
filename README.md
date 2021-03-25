@@ -14,11 +14,23 @@ note that this work and the cad model is under the GNU General Public License v3
 ## heat exchanger
 
 ### msre primary heat exchanger
+![](heatexchanger/docs/phexcadmodel.png)
+[onshape primaryheatexchanger cad model](https://cad.onshape.com/documents/03be2f510296a2e264886390/w/8cfbca3b7b9682dd4e53a998/e/54728fd981a1b4f5594c73d6)
+![](heatexchanger/docs/phexflowpaths.png)
+[simscale primaryheatexchanger simulation model](https://www.simscale.com/projects/MalcolmAkner/phex_-_final_version/)
+![](heatexchanger/docs/phexreal.png)
+
 
 ### msre radiator
+![](heatexchanger/docs/radiatorcadmodel.png)
+[onshape radiator cad model](https://cad.onshape.com/documents/bf944323ed6a82e05924078c/w/2a25d73c5a3a66824d2d5fbd/e/a83d5535602a053216fedff4)
+![](heatexchanger/docs/radiatorflowpaths.png)
+[simscale radiator simulation model](https://www.simscale.com/projects/MalcolmAkner/msre_radiator_public/)
+![](heatexchanger/docs/radiatorreal.png)
 
 ---
 
 please contact [me](https://github.com/aslakstubsgaard) if you want to contribute.
+note that this work and the cad model is under the GNU General Public License v3.0
 
 ---
