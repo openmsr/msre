@@ -11,7 +11,7 @@ the work-in-progress cad model can be found [here](https://cad.onshape.com/docum
 
 note that this work and the cad model is under the GNU General Public License v3.0
 
-## heat exchanger
+## msre heat exchanger
 
 ### msre primary heat exchanger
 ![](heatexchanger/docs/phexcadmodel.png)
