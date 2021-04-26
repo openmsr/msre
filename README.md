@@ -20,9 +20,11 @@ open-access [master's thesis](https://ltu.diva-portal.org/smash/get/diva2:154699
 
 ### msre primary heat exchanger
 ![](heatexchanger/docs/phexcadmodel.png)
-[onshape primaryheatexchanger cad model](https://cad.onshape.com/documents/03be2f510296a2e264886390/w/8cfbca3b7b9682dd4e53a998/e/54728fd981a1b4f5594c73d6)
+[onshape primary heat exchanger cad model](https://cad.onshape.com/documents/03be2f510296a2e264886390/w/8cfbca3b7b9682dd4e53a998/e/54728fd981a1b4f5594c73d6), open to copy and use freely. chapter 4.1 in the [thesis](https://ltu.diva-portal.org/smash/get/diva2:1546993/FULLTEXT01.pdf) covers the details extensively with references to original msre reports. 
+
 ![](heatexchanger/docs/phexflowpaths.png)
 [simscale primaryheatexchanger simulation model](https://www.simscale.com/projects/MalcolmAkner/phex_-_final_version/)
+
 ![](heatexchanger/docs/phexreal.png)
 
 
