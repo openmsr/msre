@@ -29,7 +29,7 @@ open-access [master's thesis](https://ltu.diva-portal.org/smash/get/diva2:154699
 
 ![](heatexchanger/docs/phexreal.png)
 
-primary heat exchanger produced and installed in msre. 
+primary heat exchanger produced and installed in the msre. 
 
 
 ### msre radiator
@@ -42,6 +42,8 @@ primary heat exchanger produced and installed in msre.
 [simscale radiator simulation model](https://www.simscale.com/projects/MalcolmAkner/msre_radiator_public/). 
 
 ![](heatexchanger/docs/radiatorreal.png)
+
+radiator produced and installed in the msre.
 
 ---
 
