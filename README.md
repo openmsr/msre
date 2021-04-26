@@ -11,7 +11,14 @@ the work-in-progress cad model can be found [here](https://cad.onshape.com/docum
 
 note that this work and the cad model is under the GNU General Public License v3.0
 
-## msre heat exchanger
+## msre heat exchangers
+
+[master's thesis](https://ltu.diva-portal.org/smash/get/diva2:1546993/FULLTEXT01.pdf) produced by Malcolm Akner about the heat exchangers of the msre, titled: 
+
+> "Validating results from the Molten Salt Reactor Experiment by use of turbulent CFD simulations
+  A study of a modified U-tube shell-and-tube primary heat exchanger and radiator with molten salts".
+  
+
 
 ### msre primary heat exchanger
 ![](heatexchanger/docs/phexcadmodel.png)
