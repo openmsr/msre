@@ -36,6 +36,6 @@ open-access [master's thesis](https://ltu.diva-portal.org/smash/get/diva2:154699
 ---
 
 please contact [me](https://github.com/aslakstubsgaard) if you want to contribute.
-note that this work and the cad model is under the GNU General Public License v3.0
+note that this work and the cad models are under the GNU General Public License v3.0
 
 ---
