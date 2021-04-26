@@ -37,10 +37,6 @@ primary heat exchanger produced and installed in the msre.
 
 [onshape radiator cad model](https://cad.onshape.com/documents/bf944323ed6a82e05924078c/w/2a25d73c5a3a66824d2d5fbd/e/a83d5535602a053216fedff4) open to copy and use freely. chapter 4.2 of the [thesis](https://ltu.diva-portal.org/smash/get/diva2:1546993/FULLTEXT01.pdf) covers the cad construction details with origianl references to msre reports. 
 
-![](heatexchanger/docs/radiatorflowpaths.png)
-
-[simscale radiator simulation model](https://www.simscale.com/projects/MalcolmAkner/msre_radiator_public/). 
-
 ![](heatexchanger/docs/radiatorreal.png)
 
 radiator produced and installed in the msre.
