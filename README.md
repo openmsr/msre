@@ -1,7 +1,7 @@
 # msre
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
-> detailed cad model of the [msre](https://en.wikipedia.org/wiki/Molten-Salt_Reactor_Experiment) (molten salt reactor experiment), operated by oak ridge national laboratory 1965-69.
+detailed cad model of the [msre](https://en.wikipedia.org/wiki/Molten-Salt_Reactor_Experiment) (molten salt reactor experiment), operated by oak ridge national laboratory 1965-69.
 
 ## msre core
 ![](core/docs/msre.png)
@@ -38,8 +38,8 @@ bash run.sh
 
 open-access [master's thesis](https://ltu.diva-portal.org/smash/get/diva2:1546993/FULLTEXT01.pdf) produced by Malcolm Akner about simulations of the heat exchangers of the msre, titled: 
 
-> Validating results from the Molten Salt Reactor Experiment by use of turbulent CFD simulations
-> - A study of a modified U-tube shell-and-tube primary heat exchanger and radiator with molten salts
+Validating results from the Molten Salt Reactor Experiment by use of turbulent CFD simulations
+- A study of a modified U-tube shell-and-tube primary heat exchanger and radiator with molten salts
 
 ### msre primary heat exchanger
 ![](heatexchanger/docs/phexcadmodel.png)
