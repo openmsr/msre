@@ -11,6 +11,29 @@ the work-in-progress cad model can be found [here](https://cad.onshape.com/docum
 
 note that this work and the cad model is under the GNU General Public License v3.0
 
+## prerequisites 
+### CAD_to_openMC
+[CAD_to_openMC](https://github.com/openmsr/CAD_to_openMC) is an open-source package to convert CAD geometry (in the form of '.step' files) into an openmc-readable h5m file
+
+### openmc
+these simulations use [openmc](https://docs.openmc.org/en/stable/). automated source installation scripts for linux can be found [here](https://github.com/openmsr/openmc_install_scripts)
+
+## simulation guide
+
+first, clone the repository
+
+```
+git clone https://github.com/openmsr/are.git
+```
+
+enter the are folder and run the `run.sh` script
+
+```
+cd are
+bash run.sh
+```
+
+
 ## msre heat exchangers
 
 open-access [master's thesis](https://ltu.diva-portal.org/smash/get/diva2:1546993/FULLTEXT01.pdf) produced by Malcolm Akner about simulations of the heat exchangers of the msre, titled: 
