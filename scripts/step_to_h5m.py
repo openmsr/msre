@@ -14,7 +14,7 @@ h5m_out_filepath = os.getcwd() + '/h5m_files/msre.h5m'
 
 # mesher config
 ab.mesher_config['min_mesh_size'] = 0.2
-ab.mesher_config['mesh_algorithm'] = 3
+ab.mesher_config['mesh_algorithm'] = 4
 ab.mesher_config['threads'] = 6
 #ab.mesher_config['max_mesh_size'] = 1000
 #ab.mesher_config['curve_samples'] = 100
