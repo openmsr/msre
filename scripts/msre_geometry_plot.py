@@ -7,7 +7,7 @@ from materials import *
 ###############################################################################
 
 #geometry
-h5m_filepath = './h5m_files/msre.h5m'
+h5m_filepath = '../h5m_files/msre_simp_cubit/msre_simp_1e-2.h5m'
 graveyard = openmc.Sphere(r=10000,boundary_type='vacuum')
 cad_univ = openmc.DAGMCUniverse(filename=h5m_filepath,auto_geom_ids=True)
 cad_cell = openmc.Cell(region=-graveyard,fill=cad_univ)
@@ -17,7 +17,8 @@ geometry=openmc.Geometry(root)
 geometry.export_to_xml()
 
 # materials
-mats = openmc.Materials([salt,BeO,inconel,insulation,coolant,helium,stainless,boron])
+mats = define_materials()
+#mats = openmc.Materials([salt,BeO,inconel,insulation,coolant,helium,stainless,boron])
 mats.export_to_xml()
 
 #plotting geometry
@@ -29,19 +30,21 @@ y_width = 300
 #xy plot
 p1 = openmc.Plot()
 p1.width = (x_width,y_width)
+p1.origin = (0,0,100)
 p1.pixels = (1000, 1000)
 p1.color_by = 'material'
 
 #xz plot (split plane)
 p2 = openmc.Plot()
 p2.basis = 'xz'
-#p2.origin = (0,5,0)
+p2.origin = (0,0,130)
 p2.width = (x_width,y_width)
 p2.pixels = (1000, 1000)
 p2.color_by = 'material'
 
 p3 = openmc.Plot()
 p3.basis = 'yz'
+p3.origin = (0,0,130)
 p3.width = (x_width,y_width)
 p3.pixels = (1000, 1000)
 p3.color_by = 'material'
