@@ -1,10 +1,10 @@
 import sys
 sys.path.append('/opt/openmc/')
 import openmc
-import neutronsmaterialmaker as nmm
+#import neutronsmaterialmaker as nmm
 
 def define_materials():
-    # salt = openmc.Material(name="salt", temperature = 903)
+    #salt = openmc.Material(name="salt", temperature = 903)
     # salt.add_nuclide('Li7', 10.9566, 'wo')
     # salt.add_element('Be', 6.3492, 'wo')
     # salt.add_element('Zr', 11.1013, 'wo')
@@ -191,9 +191,9 @@ def define_materials():
     bush.name='bush'
 
     #Concrete block
-    concrete=nmm.Material.from_library('Concrete, Regular')
-    concrete=concrete.openmc_material
-    concrete.name="concrete"
+    #concrete=nmm.Material.from_library('Concrete, Regular')
+    #concrete=concrete.openmc_material
+    #concrete.name="concrete"
     #Baryte block
     baryte = openmc.Material(name="baryte", temperature = 903)
     baryte.add_element('Ba',1)
@@ -205,10 +205,10 @@ def define_materials():
     water.add_element('H',2)
     water.add_element('O',1)
     water.set_density('g/cm3',0.997)
-    steel =  nmm.Material.from_library('Steel, Carbon')
-    steel=steel.openmc_material
-    shield = openmc.Material.mix_materials([water,steel],[0.5,0.5],'wo')
-    shield.name='waterSteel'
+    #steel =  nmm.Material.from_library('Steel, Carbon')
+    #steel=steel.openmc_material
+    #shield = openmc.Material.mix_materials([water,steel],[0.5,0.5],'wo')
+    #shield.name='waterSteel'
 
     detector = openmc.Material(name = 'water')
     detector.add_element('O',76.2,percent_type='wo')
@@ -217,6 +217,6 @@ def define_materials():
     detector.add_element('N',2.6,percent_type='wo')
     detector.set_density('g/cm3',1.0)
 
-    mats = openmc.Materials([salt,graphite,inor,helium,inconel,bush,concrete,baryte,shield,detector])
+    mats = openmc.Materials([salt,graphite,inor,helium,inconel,bush])#,concrete,baryte,shield,detector])
     mats.export_to_xml()
     return mats
