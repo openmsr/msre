@@ -1,7 +1,7 @@
 # msre
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
-> detailed cad model of the [msre](https://en.wikipedia.org/wiki/Molten-Salt_Reactor_Experiment) (molten salt reactor experiment), operated by oak ridge national laboratory 1965-69.
+detailed cad model of the [msre](https://en.wikipedia.org/wiki/Molten-Salt_Reactor_Experiment) (molten salt reactor experiment), operated by oak ridge national laboratory 1965-69.
 
 ## msre core
 ![](core/docs/msre.png)
@@ -11,12 +11,35 @@ the work-in-progress cad model can be found [here](https://cad.onshape.com/docum
 
 note that this work and the cad model is under the GNU General Public License v3.0
 
+## prerequisites 
+### CAD_to_openMC
+[CAD_to_openMC](https://github.com/openmsr/CAD_to_openMC) is an open-source package to convert CAD geometry (in the form of '.step' files) into an openmc-readable h5m file
+
+### openmc
+these simulations use [openmc](https://docs.openmc.org/en/stable/). automated source installation scripts for linux can be found [here](https://github.com/openmsr/openmc_install_scripts)
+
+## simulation guide
+
+first, clone the repository
+
+```
+git clone https://github.com/openmsr/are.git
+```
+
+enter the are folder and run the `run.sh` script
+
+```
+cd are
+bash run.sh
+```
+
+
 ## msre heat exchangers
 
 open-access [master's thesis](https://ltu.diva-portal.org/smash/get/diva2:1546993/FULLTEXT01.pdf) produced by Malcolm Akner about simulations of the heat exchangers of the msre, titled: 
 
-> Validating results from the Molten Salt Reactor Experiment by use of turbulent CFD simulations
-> - A study of a modified U-tube shell-and-tube primary heat exchanger and radiator with molten salts
+Validating results from the Molten Salt Reactor Experiment by use of turbulent CFD simulations
+- A study of a modified U-tube shell-and-tube primary heat exchanger and radiator with molten salts
 
 ### msre primary heat exchanger
 ![](heatexchanger/docs/phexcadmodel.png)
