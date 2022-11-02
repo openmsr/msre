@@ -9,7 +9,7 @@ import CAD_to_OpenMC.assembly as ab
 ###############################################################################
 
 # inputs
-step_filepath = "./step_files/msre.step"
+step_filepath = "./step_files/msre_parts.step"
 h5m_out_filepath = os.getcwd() + '/h5m_files/msre.h5m'
 
 # mesher config
@@ -25,5 +25,20 @@ ab.mesher_config['threads'] = 6
 # output
 a=ab.Assembly()
 a.stp_files=[step_filepath]
-a.import_stp_files()
+tags={'hold-down.*':'graphite',\
+  'thimble.*':'inor', 'core\ support':'graphite',\
+  'graphite':'graphite',\
+  'core.*':'inor',\
+  'vessel':'hastelloy',\
+  '.*stringer.*':'graphite',\
+  'inor.*':'inor',\
+  '(bottom|top|basket)':'hastelloy',\
+  '(lower|upper) lattice':'graphite',\
+  'lifting stud':'inor',\
+  'distributor':'inor',\
+  'restrictor':'inor',\
+  '(support|lower) ring':'inor',\
+  '^(left|right|back|front)$':'graphite',\
+  '.*grid support':'inor'}
+a.import_stp_files(tags=tags, match_anywhere=True)
 a.solids_to_h5m(backend='gmsh',h5m_filename=h5m_out_filepath)
