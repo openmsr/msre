@@ -15,24 +15,25 @@ h5m_out_filepath = os.getcwd() + '/h5m_files/msre.h5m'
 # mesher config
 ab.mesher_config['min_mesh_size'] = 0.2
 ab.mesher_config['mesh_algorithm'] = 4
-ab.mesher_config['threads'] = 6
+ab.mesher_config['threads'] = 32
 #ab.mesher_config['max_mesh_size'] = 1000
 #ab.mesher_config['curve_samples'] = 100
 #ab.mesher_config['vetoed'] = [474,1157,1243,1341,1537]
 #ab.mesher_config['angular_tolerance'] = 0.09
 #ab.mesher_config['tolerance'] = 0.001
-
+ab.mesher_config['refine']=False
 # output
 a=ab.Assembly()
+a.remove_intermediate_files=True
 a.stp_files=[step_filepath]
 tags={'hold-down.*':'graphite',\
   'thimble.*':'inor', 'core\ support':'graphite',\
   'graphite':'graphite',\
   'core.*':'inor',\
-  'vessel':'hastelloy',\
+  'vessel':'inconel',\
   '.*stringer.*':'graphite',\
   'inor.*':'inor',\
-  '(bottom|top|basket)':'hastelloy',\
+  '(bottom|top|basket)':'inconel',\
   '(lower|upper) lattice':'graphite',\
   'lifting stud':'inor',\
   'distributor':'inor',\
