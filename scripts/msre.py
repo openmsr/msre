@@ -3,7 +3,7 @@ from materials import *
 import openmc
 
 ###############################################################################
-#k eigenvalue simulation on ARE (all safety rods fully inserted)
+#k eigenvalue simulation on msre (all safety rods fully inserted)
 ###############################################################################
 
 h5m_filepath = 'h5m_files/msre.h5m'

@@ -7,7 +7,7 @@ from materials import *
 ###############################################################################
 
 #Geometry
-h5m_filepath = 'h5m_files/ARE.h5m'
+h5m_filepath = 'h5m_files/msre.h5m'
 graveyard = openmc.Sphere(r=10000,boundary_type='vacuum')
 cad_univ = openmc.DAGMCUniverse(filename=h5m_filepath,auto_geom_ids=True)
 cad_cell = openmc.Cell(region=-graveyard,fill=cad_univ)

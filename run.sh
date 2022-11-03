@@ -2,7 +2,7 @@
 
 set -ex
 
-PS3='ARE simulations: '
+PS3='MSRE simulations: '
 options=("k eigenvalue" "geometry plot" "neutron flux" "photon flux" "quit")
 select opt in "${options[@]}"
 do
