@@ -397,9 +397,10 @@ def depletion(model, mass, power):
 
 def control_rod_worth(model):
     keffs = []
+    cell = model.geometry.get_cells_by_name('CR1')[0]
     for inch in np.arange(0,51,10):
         cm = inch*2.54
-        setattr(cr1_cell, 'translation', [0,0,19.2+cm])
+        setattr(cell, 'translation', [0,0,19.2+cm])
         results=model.run()
         with openmc.StatePoint(res) as sp:
             keffs.append(sp.keff.n)
