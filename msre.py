@@ -401,7 +401,7 @@ def control_rod_worth(model):
     for inch in np.arange(0,51,10):
         cm = inch*2.54
         setattr(cell, 'translation', [0,0,19.2+cm])
-        results=model.run()
+        res=model.run()
         with openmc.StatePoint(res) as sp:
             keffs.append(sp.keff.n)
     plt.figure()
