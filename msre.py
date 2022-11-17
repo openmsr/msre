@@ -197,8 +197,8 @@ def build(make_tally=True, plot_geom=True):
     os.system("rm *.xml *.h5 *.out")
 
     # CAD h5m files
-    core_h5m = 'h5m/MSRE_Core_1e-2/MSRE_Core_1e-2.h5m'
-    control_rod1_h5m = 'h5m/Msre_control_rod_1e-2/Msre_control_rod_1e-2.h5m'
+    core_h5m = 'h5m/msre_reactor_1e-2.h5m'
+    control_rod1_h5m = 'h5m/msre_control_rod_1e-2.h5m'
 
     #Materials
     mats=define_materials()
