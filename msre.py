@@ -396,19 +396,23 @@ def depletion(model, mass, power):
     integrator.integrate(final_step = False)
 
 def control_rod_worth(model):
-    keffs = []
+    rho = []
     cell = model.geometry.get_cells_by_name('CR1')[0]
     for inch in np.arange(0,51,10):
         cm = inch*2.54
         setattr(cell, 'translation', [0,0,19.2+cm])
         res=model.run()
         with openmc.StatePoint(res) as sp:
-            keffs.append(sp.keff.n)
+            keff=sp.keff.n
+            pcm = (keff-1)/keff*1e5
+            rho.append(pcm)
+    dx = 2*2.54
+    d_rho = np.diff(rho)/dx
     plt.figure()
-    plt.scatter(np.arange(0,51,10), keffs)
+    plt.scatter(np.arange(0,51,10)[1:], d_rho)
     plt.xlabel('Withdrawn of control rod n. 1 [inch]')
-    plt.ylabel('keff')
-    plt.savefig('rod_worth')
+    plt.ylabel('Reactivity worth')
+    plt.savefig('reac_rod_worth')
 
 def triton_adder(mass):
 
