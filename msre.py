@@ -398,18 +398,22 @@ def depletion(model, mass, power):
 def control_rod_worth(model):
     rho = []
     cell = model.geometry.get_cells_by_name('CR1')[0]
-    for inch in np.arange(0,51,5):
-        cm = inch*2.54
-        setattr(cell, 'translation', [0,0,19.2+cm])
+    rod_x = [51, 49, 45, 41, 37, 33, 29, 25, 21, 17, 13, 9, 5, 2, 0]
+    for x in rod_x:
+        setattr(cell, 'translation', [0, 0, 19.2+x])
         res=model.run()
         with openmc.StatePoint(res) as sp:
             keff=sp.keff.n
             pcm = (keff-1)/keff*1e5
             rho.append(pcm)
-    dx = 5*2.54
-    d_rho = np.diff(rho)/dx
+    drho = np.diff(rho)/abs(np.diff(rod_x))
+    print(drho)
     plt.figure()
-    plt.scatter(np.arange(0,51,5)[1:], d_rho)
+    plt.plot(rod_x, drho, marker='x', label='Sim')
+    drho_exp = [6.7, 10, 13.9, 17.7, 20.8, 23, 24.2, 24.4, 23.3, 20.9, 17.5, 13.2, 9.6, 7.1]
+    err_exp = [0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.7, 0.7, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2]
+    plt.errorbar(rod_x[1:], drho_exp, yerr=err_exp, label='Exp')
+    plt.legend()
     plt.xlabel('Withdrawn of control rod n. 1 [inch]')
     plt.ylabel('Reactivity worth')
     plt.savefig('reac_rod_worth')
