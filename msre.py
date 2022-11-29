@@ -3,61 +3,114 @@ import openmc
 import openmc.deplete
 import openmc.lib
 import numpy as np
-from math import log10
+from math import log10, sqrt
 from collections import OrderedDict
 import matplotlib.pyplot as plt
 import pandas as pd
 from scipy import stats
 import math
+from scipy.optimize import curve_fit
+import numpy as np
+import re
 
-def define_materials():
-    # fuel salt
-    salt = openmc.Material(name="salt", temperature = 911)
-    salt.add_nuclide('Li6',1.31480070E-05)
-    salt.add_nuclide('Li7', 0.262960140146177)
-    salt.add_nuclide('Be9',1.1863E-01)
-    salt.add_nuclide('Zr90',1.0543E-02)
-    salt.add_nuclide('Zr91',2.2991E-03)
-    salt.add_nuclide('Zr92',3.5142E-03)
-    salt.add_nuclide('Zr94',3.5613E-03)
-    salt.add_nuclide('Zr96',5.7375E-04)
-    salt.add_nuclide('Hf174',8.3786E-10)
-    salt.add_nuclide('Hf176',2.7545E-08)
-    salt.add_nuclide('Hf177',9.7401E-08)
-    salt.add_nuclide('Hf178',1.4285E-07)
-    salt.add_nuclide('Hf179',7.1323E-08)
-    salt.add_nuclide('Hf180',1.8370E-07)
-    salt.add_nuclide('U234',1.034276246E-05)
-    salt.add_nuclide('U235',1.009695816E-03)
-    salt.add_nuclide('U236',4.227809892E-06)
-    salt.add_nuclide('U238',2.168267822E-03)
-    salt.add_nuclide('Fe54',2.8551E-06)
-    salt.add_nuclide('Fe56',4.4818E-05)
-    salt.add_nuclide('Fe57',1.0350E-06)
-    salt.add_nuclide('Fe58',1.3775E-07)
-    salt.add_nuclide('Cr50',2.1224E-06)
-    salt.add_nuclide('Cr52',4.0928E-05)
-    salt.add_nuclide('Cr53',4.6409E-06)
-    salt.add_nuclide('Cr54',1.1552E-06)
-    salt.add_nuclide('Ni58',5.8597E-06)
-    salt.add_nuclide('Ni60',2.2571E-06)
-    salt.add_nuclide('Ni61',9.8117E-08)
-    salt.add_nuclide('Ni62',3.1284E-07)
-    salt.add_nuclide('Ni64',7.9671E-08)
-    salt.add_nuclide('O16',5.1437E-04)
-    salt.add_nuclide('O17',1.8927E-07)
-    salt.add_nuclide('O18',9.6440E-07)
-    salt.add_nuclide('F19',5.9409E-01)
-    salt.set_density('g/cm3', 2.3275)
+def calc_density(temp_c):
+    temp_f = temp_c*9/5 + 32 #Convert from Celsius to F
+    temp_ref = 1181 # F or 638.3 C
+    rho_ref = 2.3275 # g/cm3 @ 1181 F
+    exp_c = -1.18e-4 # 1/F fuel salt expansion coefficient
+    rho_calc = rho_ref * (1 + exp_c*(temp_f-temp_ref)) #adjusted density
+    return rho_calc
+
+def define_materials(fuel_temp, u235_load=None):
+    # CRITICALITY BENCHMARK, definition based on U235 mass fraction of 0.01408 wt%
+    # fuel salt temperature of 638.3 C and salt density of 2.3275
+    if u235_load is None:
+        rho = calc_density(fuel_temp)
+        tot_mass = 4340.43 * 1000 # Total fuel salt in the loop charge, fixed [g]
+        volume = tot_mass/rho # assuming total volume remains constant
+
+        salt = openmc.Material(name="salt", temperature = fuel_temp + 273.15)
+        salt.add_nuclide('Li6',1.31480070E-05)
+        salt.add_nuclide('Li7', 0.262960140146177)
+        salt.add_nuclide('Be9',1.1863E-01)
+        salt.add_nuclide('Zr90',1.0543E-02)
+        salt.add_nuclide('Zr91',2.2991E-03)
+        salt.add_nuclide('Zr92',3.5142E-03)
+        salt.add_nuclide('Zr94',3.5613E-03)
+        salt.add_nuclide('Zr96',5.7375E-04)
+        salt.add_nuclide('Hf174',8.3786E-10)
+        salt.add_nuclide('Hf176',2.7545E-08)
+        salt.add_nuclide('Hf177',9.7401E-08)
+        salt.add_nuclide('Hf178',1.4285E-07)
+        salt.add_nuclide('Hf179',7.1323E-08)
+        salt.add_nuclide('Hf180',1.8370E-07)
+        salt.add_nuclide('U234',1.034276246E-05)
+        salt.add_nuclide('U235',1.009695816E-03)
+        salt.add_nuclide('U236',4.227809892E-06)
+        salt.add_nuclide('U238',2.168267822E-03)
+        salt.add_nuclide('Fe54',2.8551E-06)
+        salt.add_nuclide('Fe56',4.4818E-05)
+        salt.add_nuclide('Fe57',1.0350E-06)
+        salt.add_nuclide('Fe58',1.3775E-07)
+        salt.add_nuclide('Cr50',2.1224E-06)
+        salt.add_nuclide('Cr52',4.0928E-05)
+        salt.add_nuclide('Cr53',4.6409E-06)
+        salt.add_nuclide('Cr54',1.1552E-06)
+        salt.add_nuclide('Ni58',5.8597E-06)
+        salt.add_nuclide('Ni60',2.2571E-06)
+        salt.add_nuclide('Ni61',9.8117E-08)
+        salt.add_nuclide('Ni62',3.1284E-07)
+        salt.add_nuclide('Ni64',7.9671E-08)
+        salt.add_nuclide('O16',5.1437E-04)
+        salt.add_nuclide('O17',1.8927E-07)
+        salt.add_nuclide('O18',9.6440E-07)
+        salt.add_nuclide('F19',5.9409E-01)
+        salt.set_density('g/cm3', rho_calc)
+
+    else:
+        # REACTIVITY BENCHMARK
+        rho = calc_density(fuel_temp)
+        # Salt composition in kg with 65.25 kg U235 at 649 C
+        salt_comp = {'Li6':507.27*0.00005,'Li7':507.27*0.99995,'Be':293.96,
+            'Zr':513.97,'Hf':0.0029,'U234':0.67,'U235':65.25,'U236':0.27,
+            'U238':141.91,'Fe':0.75,'Cr':0.13,'Ni':0.14,'O':2.27,'F':3103.22}
+        tot_mass = sum(salt_comp.values())*1000
+        # Calculate total volume assuming fuel salt composition at first load reamins fixed
+        volume = tot_mass/rho
+
+        # HEU additions mass fraction
+        heu = {'Li6':4.93*0.00005,'Li7':4.93*0.99995,'U234':0.59,
+            'U235':57.7,'U236':0.24,'U238':3.54,'F':33}
+
+        # Add u235
+        mass_add =  u235_load - salt_comp['U235']
+        for comp,mass in salt_comp.items():
+            if comp in heu:
+                salt_comp[comp] += mass_add/heu['U235']*heu[comp]
+        # Recalculate total mass
+        tot_mass = sum(salt_comp.values())*1000
+
+        salt = openmc.Material(name="salt", temperature = fuel_temp + 273.15)
+        for comp, mass in salt_comp.items():
+            splt = re.split(r'\d+', comp)
+            if len(splt) == 2:
+                salt.add_nuclide(comp, mass/tot_mass, 'wo')
+            else:
+                for nuc,frac in openmc.data.isotopes(comp):
+                    salt.add_nuclide(nuc, mass*frac/tot_mass, 'wo')
+        # Recalculate density as new total mass and fixed volume
+        salt.set_density('g/cm3',tot_mass/volume)
+    #Get U235 mass
+    salt.volume = volume #Assign volume as Loop total volume in cm3
 
     #moderator blocks170
-    graphite = openmc.Material(name='graphite',temperature=911)
+    graphite = openmc.Material(name='graphite',temperature=fuel_temp + 273.15)
     graphite.set_density('g/cm3',1.86)
     graphite.add_nuclide('C12',1)
     graphite.add_s_alpha_beta('c_Graphite')
 
     #inor-8
-    inor = openmc.Material(name='inor-8',temperature=911)
+    inor = openmc.Material(name='inor-8',temperature=fuel_temp + 273.15)
     inor.set_density('g/cm3',8.7745)
     inor.add_element('Ni',(66+71)/2,'wo')
     inor.add_element('Mo',(15+18)/2,'wo')
@@ -82,7 +135,7 @@ def define_materials():
 
     #Control rods inconel clad
     trace = 0.01
-    inconel = openmc.Material(name='inconel', temperature = 911)
+    inconel = openmc.Material(name='inconel', temperature = 65.6 + 273.15)
     inconel.add_element('Ni',78.5,percent_type='wo')
     inconel.add_element('Cr',14.0,percent_type='wo')
     inconel.add_element('Fe',6.5,percent_type='wo')
@@ -110,7 +163,7 @@ def define_materials():
     inconel.set_density('g/cm3',8.5)
 
     # SS 316 control rod flexible hose
-    ss316 = openmc.Material(name='ss316')
+    ss316 = openmc.Material(name='ss316', temperature = 65.6 + 273.15)
     ss316.add_element('C',0.026,'wo')
     ss316.add_element('Si',0.37,'wo')
     ss316.add_element('Mn',0.16,'wo')
@@ -135,6 +188,7 @@ def define_materials():
     Al2O3.set_density('g/cm3',3.95)
     bush = openmc.Material.mix_materials([Gd2O3,Al2O3],[0.7,0.3],'wo')
     bush.name='bush'
+    bush.temperature = 65.6 +273.15
 
     #Concrete block
     concrete = openmc.Material(name='concrete')
@@ -192,7 +246,7 @@ def define_materials():
     mats = openmc.Materials([salt,graphite,inor,helium,inconel,shield,concrete,steel,ss316,sandwater,insulation,bush])
     return mats
 
-def build(make_tally=True, plot_geom=True):
+def build(make_tally=True, plot_geom=True, u235_load=None, fuel_temp=638.3, cr1_pos=46.6, cr2_pos=51, cr3_pos=51):
     #Clean-up
     os.system("rm *.xml *.h5 *.out")
 
@@ -201,7 +255,7 @@ def build(make_tally=True, plot_geom=True):
     control_rod1_h5m = 'h5m/msre_control_rod_1e-2.h5m'
 
     #Materials
-    mats=define_materials()
+    mats=define_materials(fuel_temp,u235_load)
 
     #Geometry
     core = openmc.DAGMCUniverse(filename=core_h5m, auto_geom_ids=True, universe_id=1)
@@ -216,18 +270,19 @@ def build(make_tally=True, plot_geom=True):
     cr1_cell = openmc.Cell(name='CR1', region=cr1_region, fill=control_rod1)
     cr2_cell = openmc.Cell(name='CR2', region=cr2_region, fill=control_rod1)
     cr3_cell = openmc.Cell(name='CR3', region=cr3_region, fill=control_rod1)
-    #translate control rod1 130 cm (51 inch) up in z direction
-    setattr(cr1_cell, 'translation', [0,0,130+19.2])
-    setattr(cr2_cell, 'translation', [-10.163255,0,130+19.2])
-    setattr(cr3_cell, 'translation', [-10.163255,10.163255,130+19.2])
+    #translate control rods
+    start_pos = 19.2
+    setattr(cr1_cell, 'translation', [0, 0, start_pos + cr1_pos*2.54])
+    setattr(cr2_cell, 'translation', [-10.163255, 0, start_pos + cr2_pos*2.54])
+    setattr(cr3_cell, 'translation', [-10.163255, 10.163255, start_pos + cr3_pos*2.54])
     geometry = openmc.Geometry([core_cell,cr1_cell,cr2_cell,cr3_cell])
 
     # Settings
     settings = openmc.Settings()
     settings.temperature = {'method':'interpolation','range':(293.15,923.15)}
-    settings.batches = 50
-    settings.inactive = 10
-    settings.particles = 50000
+    settings.batches = 300
+    settings.inactive = 50
+    settings.particles = 100000
     settings.photon_transport = False
     source_area = openmc.stats.Box([-100., -100., 0.],[ 100.,  100.,  200.],only_fissionable = True)
     settings.source = openmc.Source(space=source_area)
@@ -404,7 +459,7 @@ def control_rod_worth(model):
         pos *= 2.54
         dx = 4 * 2.54
         for shift in [-dx,dx]:
-            setattr(cell, 'translation', [0, 0, 19.2+pos+dx])
+            setattr(cell, 'translation', [0, 0, 19.2+pos+shift])
             res=model.run()
             with openmc.StatePoint(res) as sp:
                 keff=sp.keff.n
@@ -421,6 +476,74 @@ def control_rod_worth(model):
     plt.xlabel('Withdrawn of control rod n. 1 [inch]')
     plt.ylabel('Reactivity worth')
     plt.savefig('reac_rod_worth')
+
+def func (x,a,b):
+    return a*x +b
+
+def feedback_isothermal(temperatures,u235_load):
+    # temperature arguments in Celsius
+    y_data = []
+    y_err = []
+    for temp in temperatures:
+        model = build(make_tally=False, plot_geom=False, fuel_temp = temp, u235_load=u235_load)
+        res=model.run()
+        with openmc.StatePoint(res) as sp:
+            k=sp.keff.n
+            y_data.append((k-1)/k)
+            y_err.append(sp.keff.s)
+
+    x_data = np.array(temperatures)
+    y_data = np.array(y_data)
+    y_err = np.array(y_err)
+    popt, pcov = curve_fit(func, x_data, y_data)
+
+    plt.figure()
+    plt.errorbar(x_data, y_data, yerr=y_err, label='Sim data')
+    symb = r'$^\circ$C'
+    #propagated error
+    err = r'$\pm${:.4f}'.format(sqrt(sum(y_err**2))*1e5)
+    plt.plot(x_data, func(x_data, *popt), '--', label='{:.3f} [pcm/{}]'.format(popt[0]*1e5,symb))
+    plt.legend()
+    plt.xlabel('Temperature '+symb)
+    plt.ylabel(r'$\rho\,\pm\sigma$')
+    plt.title(r'Isothermal temperature coefficient, {u235_load} kg $^{235}U$ in loop')
+    plt.savefig(f'iso_temperature_feedback_{str(u235_load)}kg.png')
+
+def rod_bank(temp, positions, loads):
+    load_results = {}
+    for load in loads:
+        y_data = []
+        y_err = []
+        # Rods position in inches where 0 is fully inserted and 51 fully withdrawn
+        for pos in positions:
+            model = build(make_tally=False, plot_geom=False, fuel_temp=temp, u235_load=load, cr1_pos=pos, cr2_pos=pos, cr3_pos=pos)
+            res=model.run()
+            with openmc.StatePoint(res) as sp:
+                y_data.append(sp.keff.n)
+                y_err.append(sp.keff.s)
+        load_results[load] = y_data,y_err
+    df=pd.DataFrame(load_results)
+    df.to_csv('rod_bank')
+
+def mass_reactivity(loads):
+    y_data = []
+    for load in loads:
+        model = build(make_tally=False, plot_geom=False, fuel_temp=648.9, u235_load=load, cr1_pos=51, cr2_pos=51, cr3_pos=51)
+        res=model.run()
+        with openmc.StatePoint(res) as sp:
+            y_data.append(sp.keff.n)
+    loads = np.array(loads)
+    y_data = np.array(y_data)
+    print(y_data)
+    x_data=(loads-loads[0])/loads[0]
+    y_data=(y_data-y_data[0])/(y_data*y_data[0])
+    popt, pcov = curve_fit(func, x_data, y_data)
+    plt.plot(x_data,y_data,'o',label='data')
+    plt.plot(x_data, func(x_data, *popt), '--', label='fit: f(x)={:.3f}x + {:.3f}'.format(popt[0],popt[1]))
+    plt.legend()
+    plt.ylabel(r'Change of reactivity, $\Delta k /(k_1k_2)$')
+    plt.xlabel(r'Fractional change of $^{235}U$ loading in loop, $\Delta m /m$')
+    plt.savefig('mass_reactivity')
 
 def triton_adder(mass):
 
@@ -486,7 +609,14 @@ def triton_adder(mass):
 if __name__ == '__main__':
     mass = 4590 #tot fuel salt mass [kg]
     power = 8e6 #total thermal power [W]
-    #run(build(make_tally=True, plot_geom=True), mass, power)
-    control_rod_worth(build(make_tally=False, plot_geom=False))
-    #depletion(build(make_tally=False, plot_geom=False), mass, power)
+    fuel_temp = 638.3#fuel temperature at the initial criticality point reported [C]
+    #run(build(make_tally=False, plot_geom=True, u235_load=71.71, cr1_pos=0,fuel_temp=648.9), mass, power)
+    #control_rod_worth(build(make_tally=False, plot_geom=False, fuel_temp=fuel_temp))
+    #rod_bank(648.9, [0,51],[67.94,69.94,71.71])
+    feedback_isothermal([598.9,648.9,698.9],67.86)
+    feedback_isothermal([598.9,648.9,698.9],71.71)
+    feedback_isothermal([598.9,648.9,698.9],69.85)
+    #feedback_fuel([598.9])#,648.9,698.9])
+    #mass_reactivity([65.25,66,67,68,69,70,71,72])
+    #depletion(build(make_tally=False, plot_geom=False, fuel_temp=fuel_temp), mass, power)
     #triton_adder(mass)
