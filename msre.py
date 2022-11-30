@@ -282,7 +282,7 @@ def build(make_tally=True, plot_geom=True, u235_load=None, fuel_temp=638.3, cr1_
     settings.temperature = {'method':'interpolation','range':(293.15,923.15)}
     settings.batches = 300
     settings.inactive = 50
-    settings.particles = 100000
+    settings.particles = 300000
     settings.photon_transport = False
     source_area = openmc.stats.Box([-100., -100., 0.],[ 100.,  100.,  200.],only_fissionable = True)
     settings.source = openmc.Source(space=source_area)
@@ -450,8 +450,9 @@ def depletion(model, mass, power):
                         timestep_units='d', power=power)
     integrator.integrate(final_step = False)
 
-def control_rod_worth(model):
+def control_rod_worth(fuel_temp, u235_load):
     drho = []
+    model = build(make_tally=False, plot_geom=False, fuel_temp = fuel_temp, u235_load=u235_load)
     cell = model.geometry.get_cells_by_name('CR1')[0]
     rod_x = [49, 45, 41, 37, 33, 29, 25, 21, 17, 13, 9, 5, 2, 0]
     for pos in rod_x:
@@ -475,7 +476,7 @@ def control_rod_worth(model):
     plt.legend()
     plt.xlabel('Withdrawn of control rod n. 1 [inch]')
     plt.ylabel('Reactivity worth')
-    plt.savefig('reac_rod_worth')
+    plt.savefig('reac_rod_worth_4inches.png')
 
 def func (x,a,b):
     return a*x +b
@@ -611,7 +612,7 @@ if __name__ == '__main__':
     power = 8e6 #total thermal power [W]
     fuel_temp = 638.3#fuel temperature at the initial criticality point reported [C]
     #run(build(make_tally=False, plot_geom=True, u235_load=71.71, cr1_pos=0,fuel_temp=648.9), mass, power)
-    #control_rod_worth(build(make_tally=False, plot_geom=False, fuel_temp=fuel_temp))
+    control_rod_worth(648.9, 65.25)
     #rod_bank(648.9, [0,51],[67.94,69.94,71.71])
     feedback_isothermal([598.9,648.9,698.9],67.86)
     feedback_isothermal([598.9,648.9,698.9],71.71)
