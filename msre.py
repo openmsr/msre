@@ -246,7 +246,7 @@ def define_materials(fuel_temp, u235_load=None):
     mats = openmc.Materials([salt,graphite,inor,helium,inconel,shield,concrete,steel,ss316,sandwater,insulation,bush])
     return mats
 
-def build(make_tally=True, plot_geom=True, u235_load=None, fuel_temp=638.3, cr1_pos=46.6, cr2_pos=51, cr3_pos=51):
+def build(make_tally=True, plot_geom=True, u235_load=None, fuel_temp=638.3, cr1_pos=51, cr2_pos=51, cr3_pos=51):
     #Clean-up
     os.system("rm *.xml *.h5 *.out")
 
@@ -280,9 +280,9 @@ def build(make_tally=True, plot_geom=True, u235_load=None, fuel_temp=638.3, cr1_
     # Settings
     settings = openmc.Settings()
     settings.temperature = {'method':'interpolation','range':(293.15,923.15)}
-    settings.batches = 300
-    settings.inactive = 50
-    settings.particles = 300000
+    settings.batches = 50
+    settings.inactive = 20
+    settings.particles = 30000
     settings.photon_transport = False
     source_area = openmc.stats.Box([-100., -100., 0.],[ 100.,  100.,  200.],only_fissionable = True)
     settings.source = openmc.Source(space=source_area)
@@ -358,16 +358,16 @@ def build(make_tally=True, plot_geom=True, u235_load=None, fuel_temp=638.3, cr1_
         plot1.colors = colors
 
         plot2 = openmc.Plot()
-        plot2.width = [200, 500]
-        plot2.pixels = [4000,10000]
+        plot2.width = [1000, 2000]
+        plot2.pixels = [4000,8000]
         plot2.origin = [-5,0,150]
         plot2.basis = 'yz'
         plot2.color_by = "material"
         plot2.colors = colors
 
         plot3 = openmc.Plot()
-        plot3.width = [200, 500]
-        plot3.pixels = [4000,10000]
+        plot3.width = [1000, 2000]
+        plot3.pixels = [4000,8000]
         plot3.origin = [0,-5,150]
         plot3.basis = 'xz'
         plot3.color_by = "material"
@@ -400,8 +400,8 @@ def run(model, mass, power):
     ax.set_xscale('log')
     #ax.set_yscale('log')
     ax.grid(True, which='both')
-    plt.title('Neutrons spectrum in fuel salt')
-    plt.savefig("spectrum",dpi=600)
+    #plt.title('Neutrons spectrum')
+    plt.savefig("norm_spectrum",dpi=600)
     #
     values = sp.get_tally(name="Mesh").get_slice(scores=['flux']).get_pandas_dataframe()["mean"]
     values = values.values.reshape(500,500)
@@ -446,8 +446,17 @@ def depletion(model, mass, power):
     msr = openmc.deplete.msr.MsrContinuous(op,model)
     msr.set_removal_rate('salt', ['Xe','Kr'], 4.067e-5)
     msr.set_removal_rate('salt', ['Se','Nb','Mo','Tc','Ru','Rh','Pd','Ag','Sb','Te'], 8.777e-3)
+
+    # Sets MSR batchwise features
+    msr_bw_geom = openmc.deplete.msr.MsrBatchwiseGeom(op, model, axis = 2,
+                        cell_id_or_name = 'CR1',
+                        bracket = [-5,5], #cm
+                        bracket_limit = [-19.2, 51*2.54], #cm
+                        nuc_density_limit=1e20, #cm
+                        tol=0.1) #cm
     integrator = openmc.deplete.CECMIntegrator(op, [5,5,30,30,30,180,95], msr_continuous=msr,
-                        timestep_units='d', power=power)
+                        msr_batchwise=msr_bw_geom, timestep_units='d', power=power)
+
     integrator.integrate(final_step = False)
 
 def control_rod_worth(fuel_temp, u235_load):
@@ -611,13 +620,13 @@ if __name__ == '__main__':
     mass = 4590 #tot fuel salt mass [kg]
     power = 8e6 #total thermal power [W]
     fuel_temp = 638.3#fuel temperature at the initial criticality point reported [C]
-    #run(build(make_tally=False, plot_geom=True, u235_load=71.71, cr1_pos=0,fuel_temp=648.9), mass, power)
-    control_rod_worth(648.9, 65.25)
+    #run(build(make_tally=True, plot_geom=True, u235_load=65.25, cr1_pos=51,fuel_temp=648.9), mass, power)
+    #control_rod_worth(648.9, 65.25)
     #rod_bank(648.9, [0,51],[67.94,69.94,71.71])
-    feedback_isothermal([598.9,648.9,698.9],67.86)
-    feedback_isothermal([598.9,648.9,698.9],71.71)
-    feedback_isothermal([598.9,648.9,698.9],69.85)
+    #feedback_isothermal([598.9,648.9,698.9],67.86)
+    #feedback_isothermal([598.9,648.9,698.9],71.71)
+    #feedback_isothermal([598.9,648.9,698.9],69.85)
     #feedback_fuel([598.9])#,648.9,698.9])
     #mass_reactivity([65.25,66,67,68,69,70,71,72])
-    #depletion(build(make_tally=False, plot_geom=False, fuel_temp=fuel_temp), mass, power)
+    depletion(build(make_tally=False, plot_geom=False, u235_load=71.71, cr1_pos=0, fuel_temp=648.9), mass, power)
     #triton_adder(mass)
