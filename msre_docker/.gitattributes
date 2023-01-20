@@ -1,0 +1,4 @@
+msre_simple.h5m filter=lfs diff=lfs merge=lfs -text
+dagmc_controlrods.h5m filter=lfs diff=lfs merge=lfs -text
+msre_control_in.h5m filter=lfs diff=lfs merge=lfs -text
+msre_control_out.h5m filter=lfs diff=lfs merge=lfs -text
