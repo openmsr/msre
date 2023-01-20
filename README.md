@@ -4,9 +4,9 @@
 detailed cad model of the [msre](https://en.wikipedia.org/wiki/Molten-Salt_Reactor_Experiment) (molten salt reactor experiment), operated by oak ridge national laboratory 1965-69.
 
 ## msre core
-<img src="core/docs/msre.png" width="250" height="500"/>
+![](core/docs/msre.png)
 
-[core/msrecore.pdf](core/docs/msrecore.pdf) lists reference of the msre core design, documented in the old msre reports and located [here](https://github.com/openmsr/msr-archive/blob/master/).
+[core/msrecore.pdf](core/docs/msrecore.pdf) lists reference of the msre core design, documented in the old msre reports and located [here](https://github.com/openmsr/msr-archive/blob/master/README.md).
 
 ## msre step files
 
