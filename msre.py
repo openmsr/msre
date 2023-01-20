@@ -450,7 +450,7 @@ def depletion(model, mass, power):
     # Sets MSR batchwise features
     msr_bw_geom = openmc.deplete.msr.MsrBatchwiseGeom(op, model, axis = 2,
                         cell_id_or_name = 'CR1',
-                        bracket = [-5,5], #cm
+                        bracket = [-2,5], #cm
                         bracket_limit = [-19.2, 51*2.54], #cm
                         nuc_density_limit=1e20, #cm
                         tol=0.1) #cm
