@@ -4,21 +4,26 @@
 detailed cad model of the [msre](https://en.wikipedia.org/wiki/Molten-Salt_Reactor_Experiment) (molten salt reactor experiment), operated by oak ridge national laboratory 1965-69.
 
 ## msre core
-<img src="core/docs/msre.png" width="500" height="500"/>
-[core/msrecore.pdf](core/docs/msrecore.pdf) lists reference of the msre core design, documented in the old msre reports and located [here](https://github.com/openmsr/msr-archive/blob/master/README.md).
+<img src="core/docs/msre.png" width="250" height="500"/>
+
+[core/msrecore.pdf](core/docs/msrecore.pdf) lists reference of the msre core design, documented in the old msre reports and located [here](https://github.com/openmsr/msr-archive/blob/master/).
 
 ## msre step files
-.step files of entire msre assembly and control rod.
+
+[step files](step_files/) of entire msre assembly and control rod.
 
 ## h5m
-.h5m surface mesh of the previous step files for OpenMC simulation.
-**Note:** the h5m files are generated with Coreform Cubit with a surface tolerance of 1e-2 cm.
+[h5m](h5m/) surface mesh of the previous step files for OpenMC simulation.
+
+**Note:** the h5m files are generated with `Coreform Cubit` with a surface tolerance of 1e-2 cm.
 
 ## docker msre
-docker conatiner which includes not only support for OpenMC with DAGMC/MOAB, embree, and double_down libraries, but also a Jupyter notebook server.
+[msre docker](msre_docker/) conatiner which includes not only support for OpenMC with DAGMC/MOAB, embree, and double_down libraries, but also a Jupyter notebook server.
 
 ## openmc notebooks
-openmc models of the msre in form of jupyter notebooks. Examples include:
+[openmc notebooks](openmc_notebooks/) of the msre in form of jupyter notebooks.
+
+Examples include:
 - msre cad with settable control rods
 - msre isothermal temperature coefficient calculation
 - msre depletion analysis with fission products removal
