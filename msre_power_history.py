@@ -50,7 +50,7 @@ salt.add_nuclide('O16',5.1437E-04)
 salt.add_nuclide('O17',1.8927E-07)
 salt.add_nuclide('O18',9.6440E-07)
 salt.add_nuclide('F19',5.9409E-01)
-salt.set_density('g/cm3', 2.32151)
+salt.set_density('g/cm3', 2.3275)
 salt.volume = 4560/2.32151*1000
 
 #moderator blocks170
@@ -264,22 +264,32 @@ model.export_to_xml()
 colors = {salt:'yellow', graphite:'black', inor: 'grey', helium: 'cyan', inconel: 'grey',
               bush: 'blue', ss316: 'grey', concrete: 'brown', shield: 'red', insulation: 'green',
               sandwater: 'lightgreen', steel: 'grey'}
-plot = openmc.Plot.from_geometry(geometry)
+plots = openmc.Plots()
+plot = openmc.Plot()
 plot.basis = 'xy'
 plot.width = (150,150)
-plot.pixels = (200,200)
-plot.origin = (0,0,150)
+plot.pixels = (500,500)
+plot.origin = (0,0,start_pos + cr1_pos)
 plot.color_by = 'material'
 plot.colors = colors
-openmc.plot_inline(plot)
-
+model.plots.append(plot)
+plot = openmc.Plot()
 plot.basis = 'xz'
-plot.width = (150,200)
-plot.pixels = (150,200)
-plot.origin = (0,-5,150)
+plot.width = (150,300)
+plot.pixels = (500,1000)
+plot.origin = (0,-5,start_pos + cr1_pos)
 plot.color_by = 'material'
 plot.colors = colors
-openmc.plot_inline(plot)
+model.plots.append(plot)
+plot = openmc.Plot()
+plot.basis = 'yz'
+plot.width = (150,300)
+plot.pixels = (500,1000)
+plot.origin = (5,0,start_pos + cr1_pos)
+plot.color_by = 'material'
+plot.colors = colors
+model.plots.append(plot)
+model.plot_geometry()
 
 results=model.run()
 
