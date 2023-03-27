@@ -256,8 +256,31 @@ else:
 tally.scores.append(heating_score)
 tallies = openmc.Tallies([tally])
 
+#Plots
+colors = {salt:'yellow', graphite:'black', inor: 'grey', helium: 'cyan', inconel: 'grey',
+              bush: 'blue', ss316: 'grey', concrete: 'brown', shield: 'red', insulation: 'green',
+              sandwater: 'lightgreen', steel: 'grey'}
+plot = openmc.Plot.from_geometry(geometry)
+plot.basis = 'xy'
+plot.width = (150,150)
+plot.pixels = (200,200)
+plot.origin = (0,0,150)
+plot.color_by = 'material'
+plot.colors = colors
+openmc.plot_inline(plot)
+
+plot.basis = 'xz'
+plot.width = (150,200)
+plot.pixels = (150,200)
+plot.origin = (0,-5,150)
+plot.color_by = 'material'
+plot.colors = colors
+openmc.plot_inline(plot)
+
 # Depletion settings
 model = openmc.model.Model(geometry,mats,settings,tallies)
+
+results=model.run()
 
 op = openmc.deplete.CoupledOperator(model,
     normalization_mode = "energy-deposition",
