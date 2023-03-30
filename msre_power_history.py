@@ -283,7 +283,7 @@ plot = openmc.Plot()
 plot.basis = 'yz'
 plot.width = (150,300)
 plot.pixels = (500,1000)
-plot.origin = (5,0,start_pos + cr1_pos)
+plot.origin = (5,0,150)
 plot.color_by = 'material'
 plot.colors = colors
 model.plots.append(plot)
