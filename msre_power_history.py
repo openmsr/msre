@@ -50,7 +50,7 @@ salt.add_nuclide('O16',5.1437E-04)
 salt.add_nuclide('O17',1.8927E-07)
 salt.add_nuclide('O18',9.6440E-07)
 salt.add_nuclide('F19',5.9409E-01)
-salt.set_density('g/cm3', 2.3275)
+salt.set_density('g/cm3', 2.32151)
 salt.volume = 4560/2.32151*1000
 
 #moderator blocks170
@@ -228,12 +228,10 @@ cr3_cell = openmc.Cell(name='CR3', region=cr3_region, fill=control_rod1)
 
 #Fix control rods initial positions
 start_pos = 19.2 #cm, geometrical distance between lower bottom and starting point
-cr1_pos = 150 * 2.54 # cm, initial position of control rod1 with respect to start post
-cr2_pos = 150 * 2.54
-cr3_pos = 150 * 2.54
-setattr(cr1_cell, 'translation', [0, 0, start_pos + cr1_pos])
-setattr(cr2_cell, 'translation', [-offset, 0, start_pos + cr2_pos])
-setattr(cr3_cell, 'translation', [-offset, offset, start_pos + cr3_pos])
+top_pos = 51 * 2.54 # cm, initial position of control rod1 with respect to start post
+setattr(cr1_cell, 'translation', [0, 0, start_pos + top_pos])
+setattr(cr2_cell, 'translation', [-offset, 0, start_pos + top_pos])
+setattr(cr3_cell, 'translation', [-offset, offset, start_pos + top_pos])
 geometry = openmc.Geometry([core_cell,cr1_cell,cr2_cell,cr3_cell])
 
 # Settings
@@ -268,16 +266,16 @@ plots = openmc.Plots()
 plot = openmc.Plot()
 plot.basis = 'xy'
 plot.width = (150,150)
-plot.pixels = (500,500)
-plot.origin = (0,0,start_pos + cr1_pos)
+plot.pixels = (1500,1500)
+plot.origin = (0,0,160)
 plot.color_by = 'material'
 plot.colors = colors
 model.plots.append(plot)
 plot = openmc.Plot()
 plot.basis = 'xz'
 plot.width = (150,300)
-plot.pixels = (500,1000)
-plot.origin = (0,-5,start_pos + cr1_pos)
+plot.pixels = (750,1500)
+plot.origin = (0,-5,150)
 plot.color_by = 'material'
 plot.colors = colors
 model.plots.append(plot)
@@ -305,12 +303,26 @@ msr.set_removal_rate('salt',
 
 df=pd.read_excel('MSRE_235_233_Power_History_R24E.xlsx')
 #U235
-timesteps = np.cumsum(df['Duration (d)'][:94]).values
-power = df['Power (MWth)'][:94].values
+timesteps = df['Duration (d)'][:94].values
+power = df['Power (MWth)'][:94].values*1000000
+#Add one further timestep at the end of every power run
+timesteps_ext = []
+power_ext = []
+for i in range(len(timesteps)):
+    power_ext.append(power[i])
+    if power[i] != 0.0:
+        # duplicate power value
+        power_ext.append(power[i])
+        # add timestep - 1 sec
+        timesteps_ext.append(timesteps[i] - 1/3600/24)
+        # add 1 sec
+        timesteps_ext.append(1/3600/24)
+    else:
+        timesteps_ext.append(timesteps[i])
 
-integrator = openmc.deplete.CECMIntegrator(op, timesteps=timesteps,
+integrator = openmc.deplete.CECMIntegrator(op, timesteps=timesteps_ext,
                         msr_continuous=msr,
                         #msr_batchwise=msr_bw_geom,
-                        timestep_units='d', power=power)
+                        timestep_units='d', power=power_ext)
 
 integrator.integrate()

@@ -1,17 +1,22 @@
 import openmc
+import openmc.deplete
 import os
 import re
 import matplotlib.pyplot as plt
 import seaborn as sns
+import datetime
+import pandas as pd
+import numpy as np
+from pathlib import Path
 regex = re.compile(r'(\d+|\s+)')
 
-path_to_results = 'depletion_results.h5'
+path_to_results = '/home/lorenzo/mnt/uranium/msre/depletion_results.h5'
 save_dir = Path(os.path.realpath(path_to_results)).parent
 mats = {mat.name: mat.id for mat in openmc.material.Materials.from_xml(save_dir / 'materials.xml')
                     if mat.depletable}
 
 results = openmc.deplete.Results(path_to_results)
-t, keff = results.get_keff()
+_, keff = results.get_keff()
 n_xe = 0
 n_kr = 0
 for nuc,_ in openmc.data.isotopes('Xe'):
@@ -19,21 +24,29 @@ for nuc,_ in openmc.data.isotopes('Xe'):
 for nuc,_ in openmc.data.isotopes('Kr'):
     n_kr += results.get_atoms(str(mats['salt']), nuc)[1]
 
-# Let's convert time from sec to days
-t /= (3600 * 24)
+df=pd.read_excel('/home/lorenzo/mnt/uranium/msre/MSRE_235_233_Power_History_R24E.xlsx')
+# U235 operation run
+dt = df['Duration (h)'][:94]
+# First operation in MW range(ORNL-4674)
+t0=datetime.datetime.strptime('24/01/1966', '%d/%m/%Y')
+date_times = []
+for t in dt:
+    date_times.append(t0)
+    t0 += datetime.timedelta(hours=t)
+date_times.append(t0)
 
-plt.figure()
+power=df['Power (MWth)'][:95]
+plt.figure(figsize=(18,10))
 ax = plt.subplot()
-k1, = ax.plot(t, [k[0] for k in keff], '--', c='red', label='keff')
 ax1 = ax.twinx()
-n2, = ax1.plot(t, n_xe, c='green', label='Xe')
-n4, = ax1.plot(t, n_kr, c='blue', label='Kr')
-ax.set_xlabel('Time[d]')
-ax.set_ylabel(r'$k_{eff}$', color='r')
-ax.tick_params(axis='y', colors='red')
-ax1.set_yscale('log')
-ax1.set_ylabel('Nuclides [atoms]')
-ax1.legend(handles=[k1, n2, n4])
+ax.errorbar(date_times, [k[0] for k in keff], [k[1] for k in keff], marker='o', color='black', markersize=4, fmt=' ')
+
+ax1.step(date_times, power, where='post', color='red')
+ax.set_ylabel(r'$k_{eff}\pm\sigma$')
+ax.set_ylim(0.98,1.01)
+ax.tick_params(axis='y')
+ax1.set_ylabel('Power [MWth]',color='red')
+ax1.tick_params(axis='y', colors='red')
 plt.savefig(f'{save_dir}/keff', dpi=600)
 
 # Microscopic absorption cross section at 0.0253 eV
@@ -43,9 +56,8 @@ _, n_xe135 = results.get_atoms(str(mats['salt']), 'Xe135')
 _, n_u235 = results.get_atoms(str(mats['salt']), 'U235')
 # Poison fraction
 pf = (xs_xe135*n_xe135)/(xs_u235*n_u235)*100
-plt.figure()
-plt.plot(t, pf)
-plt.xlabel('Time [d]')
+plt.figure(figsize=(18,10))
+plt.plot(date_times, pf)
 plt.ylabel('Xe posion fraction [%]')
 plt.savefig(f'{save_dir}/fission_products', dpi=600)
 
@@ -56,18 +68,23 @@ for nuc,_ in openmc.data.isotopes('U'):
 for nuc in ['Pu238','Pu239','Pu240','Pu241','Pu242']:
     inventory[nuc] = results.get_atoms(str(mats['salt']), nuc)[1] / openmc.data.AVOGADRO * openmc.data.atomic_mass(nuc) / 1000
 
-plt.figure()
+plt.figure(figsize=(18,10))
 for nuc, mass in inventory.items():
-    plt.plot(t, mass, label=nuc)
-plt.xlabel('Time [y]')
+    plt.plot(date_times, mass, label=nuc)
 plt.ylabel('Mass [g]')
 plt.yscale('log')
 plt.ylim(1e-5)
 plt.legend()
 plt.savefig(f'{save_dir}/inventory', dpi=600)
 
-# All nuclides present in the fuel at last time-step
-nucs = results.export_to_materials(-1)[0].get_nuclides()
+lib = openmc.data.DataLibrary.from_xml(os.environ.get("OPENMC_CROSS_SECTION"))
+nuclides = set()
+for library in lib.libraries:
+    if library['type'] != 'neutron':
+        continue
+    for name in library['materials']:
+        if name not in nuclides:
+            nuclides.add(name)
 
 # Let's begin by making some useful groupings
 gaseos = ['H', 'He', 'Ne', 'Ar', 'Kr', 'Xe', 'Rn'] #gaseous fission products
@@ -82,7 +99,7 @@ m_a = ['Ac','Th','Pa','Np','Am','Cm','Bk','Cf','Es','Fm','Md','No','Lr']
 # Get fissile nuclides in the fuel, based on Ronen's rule for determining fissile isotopes
 fissile = []
 
-for nuc in nucs:
+for nuc in nuclides:
     elm = regex.split(nuc)[0]
     a = round(openmc.data.atomic_mass(nuc))
     z = openmc.data.ATOMIC_NUMBER[elm]
@@ -99,7 +116,7 @@ for nuc in fissile:
 
 nuclides_stack = dict()
 groups_stack = {'Gaseos':0, 'Noble metals':0, 'Metals':0, 'Halogens':0 , 'Alkali metals':0, 'Alkali earths':0, 'Lanthanides':0, 'MA':0, 'Others':0}
-for nuc in nucs:
+for nuc in nuclides:
 
     if regex.split(nuc)[0] in ['U','Pu']:
         nuclides_stack[nuc] = results.get_reaction_rate(str(mats['salt']), nuc, 'fission')[1]
@@ -161,7 +178,7 @@ groups_stack.update(u_series)
 groups_stack.update(pu_series)
 
 plt.figure(figsize=(15,10))
-plt.stackplot(t, groups_stack.values(), labels=groups_stack.keys(),
+plt.stackplot(date_times, groups_stack.values(), labels=groups_stack.keys(),
               edgecolor="black", linewidth=0.5,colors=colors, alpha=0.8)
 handles, labels = plt.gca().get_legend_handles_labels()
 legend = plt.legend([handles[idx] for idx in list(reversed(np.arange(0,len(handles),1)))],
@@ -169,8 +186,7 @@ legend = plt.legend([handles[idx] for idx in list(reversed(np.arange(0,len(handl
                             bbox_to_anchor=(1.05,1), loc='upper left',
                             borderaxespad=0, ncol=2,
                             fontsize=15)
-plt.xlabel('Time [d]',weight='bold',fontsize=17)
-plt.title('Neutrons absorption distribution per neutron absorbed in fissile isotopes',
+plt.title('Fuel salt neutrons absorption distribution per neutron absorbed in fissile isotopes',
                    weight='bold', fontsize=17)
 plt.xticks(fontsize=13)
 plt.yticks(fontsize=13)
