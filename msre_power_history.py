@@ -332,7 +332,7 @@ msr_bw_geom = openmc.deplete.msr.MsrBatchwiseGeom(op, model, axis = 2,
 
 msr_bw_mat = openmc.deplete.msr.MsrBatchwiseMat(op, model,
                                                 mat_id_or_name = 'salt',
-                                                refuel_vector = {'U235':1,
+                                                refuel_vector = {'U235':1},
                                                 bracket = [1e2,1e3], #grams
                                                 bracket_limit = [0,1e5], #grams
                                                 atom_density_limit = 1e10, #atoms/cm3
