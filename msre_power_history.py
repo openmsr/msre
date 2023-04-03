@@ -230,7 +230,7 @@ cr3_cell = openmc.Cell(name='CR3', region=cr3_region, fill=control_rod1)
 #Fix control rods initial positions
 start_pos = 19.2 #cm, geometrical distance between lower bottom and starting point
 top_pos = 51 * 2.54 # cm, initial position of control rod1 with respect to start post
-init_pos = 48 * 2.54
+init_pos = 40 * 2.54
 setattr(cr1_cell, 'translation', [0, 0, start_pos + init_pos])
 setattr(cr2_cell, 'translation', [-offset, 0, start_pos + top_pos])
 setattr(cr3_cell, 'translation', [-offset, offset, start_pos + top_pos])
@@ -289,7 +289,7 @@ plot.origin = (5,0,150)
 plot.color_by = 'material'
 plot.colors = colors
 model.plots.append(plot)
-model.plot_geometry()
+#model.plot_geometry()
 
 #results=model.run()
 
@@ -326,8 +326,8 @@ power = df['Power (MWth)'][:94].values*1000000
 msr_bw_geom = openmc.deplete.msr.MsrBatchwiseGeom(op, model, axis = 2,
                                                   cell_id_or_name = 'CR1',
                                                   bracket = [-2, 5], #cm
-                                                  bracket_limit = [-19.2,start_pos + top_pos], #cm
-                                                  atom_density_limit = 1e10, #atoms/cm3
+                                                  bracket_limit = [-(19.2+init_pos),(top_pos-init_pos)+19.2], #cm
+                                                  atom_density_limit = 1e8, #atoms/cm3
                                                   tol = 0.1)
 
 msr_bw_mat = openmc.deplete.msr.MsrBatchwiseMat(op, model,
@@ -335,7 +335,7 @@ msr_bw_mat = openmc.deplete.msr.MsrBatchwiseMat(op, model,
                                                 refuel_vector = {'U235':1},
                                                 bracket = [1e2,1e3], #grams
                                                 bracket_limit = [0,1e5], #grams
-                                                atom_density_limit = 1e10, #atoms/cm3
+                                                atom_density_limit = 1e8, #atoms/cm3
                                                 tol = 0.01)
 
 # after a refuel, alwyas restarts the water level at 0
