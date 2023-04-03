@@ -326,7 +326,7 @@ power = df['Power (MWth)'][:94].values*1000000
 msr_bw_geom = openmc.deplete.msr.MsrBatchwiseGeom(op, model, axis = 2,
                                                   cell_id_or_name = 'CR1',
                                                   bracket = [-2, 5], #cm
-                                                  bracket_limit = [0,start_pos + top_pos], #cm
+                                                  bracket_limit = [-19.2,start_pos + top_pos], #cm
                                                   atom_density_limit = 1e10, #atoms/cm3
                                                   tol = 0.1)
 
