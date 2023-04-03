@@ -51,8 +51,9 @@ salt.add_nuclide('O17',1.8927E-07)
 salt.add_nuclide('O18',9.6440E-07)
 salt.add_nuclide('F19',5.9409E-01)
 salt.set_density('g/cm3', 2.32151)
-salt.volume = 4560/2.32151*1000
-
+#salt.volume = 4560/2.32151*1000
+#salt.volume = 70 * 0.0283168 *1e6 #Circulating primary salt: 70 ft3 (ORNL-4658)
+salt.volume = 1.996 * 1e6 # https://info.ornl.gov/sites/publications/Files/Pub173113.pdf
 #moderator blocks170
 graphite = openmc.Material(name='graphite',temperature= salt_temp + 273.15)
 graphite.set_density('g/cm3',1.86)
@@ -229,7 +230,8 @@ cr3_cell = openmc.Cell(name='CR3', region=cr3_region, fill=control_rod1)
 #Fix control rods initial positions
 start_pos = 19.2 #cm, geometrical distance between lower bottom and starting point
 top_pos = 51 * 2.54 # cm, initial position of control rod1 with respect to start post
-setattr(cr1_cell, 'translation', [0, 0, start_pos + top_pos])
+init_pos = 48 * 2.54
+setattr(cr1_cell, 'translation', [0, 0, start_pos + init_pos])
 setattr(cr2_cell, 'translation', [-offset, 0, start_pos + top_pos])
 setattr(cr3_cell, 'translation', [-offset, offset, start_pos + top_pos])
 geometry = openmc.Geometry([core_cell,cr1_cell,cr2_cell,cr3_cell])
@@ -256,7 +258,7 @@ tallies = openmc.Tallies([tally])
 
 # Depletion settings
 model = openmc.model.Model(geometry,mats,settings,tallies)
-model.export_to_xml()
+#model.export_to_xml()
 
 #Plots
 colors = {salt:'yellow', graphite:'black', inor: 'grey', helium: 'cyan', inconel: 'grey',
@@ -289,7 +291,7 @@ plot.colors = colors
 model.plots.append(plot)
 model.plot_geometry()
 
-results=model.run()
+#results=model.run()
 
 op = openmc.deplete.CoupledOperator(model,
     normalization_mode = "energy-deposition",
@@ -306,23 +308,42 @@ df=pd.read_excel('MSRE_235_233_Power_History_R24E.xlsx')
 timesteps = df['Duration (d)'][:94].values
 power = df['Power (MWth)'][:94].values*1000000
 #Add one further timestep at the end of every power run
-timesteps_ext = []
-power_ext = []
-for i in range(len(timesteps)):
-    power_ext.append(power[i])
-    if power[i] != 0.0:
-        # duplicate power value
-        power_ext.append(power[i])
-        # add timestep - 1 sec
-        timesteps_ext.append(timesteps[i] - 1/3600/24)
-        # add 1 sec
-        timesteps_ext.append(1/3600/24)
-    else:
-        timesteps_ext.append(timesteps[i])
+# timesteps_ext = []
+# power_ext = []
+# for i in range(len(timesteps)):
+#     power_ext.append(power[i])
+#     if power[i] != 0.0:
+#         # duplicate power value
+#         power_ext.append(power[i])
+#         # add timestep - 1 sec
+#         timesteps_ext.append(timesteps[i] - 1/3600/24)
+#         # add 1 sec
+#         timesteps_ext.append(1/3600/24)
+#     else:
+#         timesteps_ext.append(timesteps[i])
 
-integrator = openmc.deplete.CECMIntegrator(op, timesteps=timesteps_ext,
+
+msr_bw_geom = openmc.deplete.msr.MsrBatchwiseGeom(op, model, axis = 2,
+                                                  cell_id_or_name = 'CR1',
+                                                  bracket = [-2, 5], #cm
+                                                  bracket_limit = [0,start_pos + top_pos], #cm
+                                                  atom_density_limit = 1e10, #atoms/cm3
+                                                  tol = 0.1)
+
+msr_bw_mat = openmc.deplete.msr.MsrBatchwiseMat(op, model,
+                                                mat_id_or_name = 'salt',
+                                                refuel_vector = {'U235':1,
+                                                bracket = [1e2,1e3], #grams
+                                                bracket_limit = [0,1e5], #grams
+                                                atom_density_limit = 1e10, #atoms/cm3
+                                                tol = 0.01)
+
+# after a refuel, alwyas restarts the water level at 0
+msr_bw = openmc.deplete.msr.MsrBatchwiseComb(msr_bw_geom, msr_bw_mat, start_pos + init_pos )
+
+integrator = openmc.deplete.CECMIntegrator(op, timesteps=timesteps,
                         msr_continuous=msr,
-                        #msr_batchwise=msr_bw_geom,
-                        timestep_units='d', power=power_ext)
+                        msr_batchwise=msr_bw,
+                        timestep_units='d', power=power)
 
 integrator.integrate()
