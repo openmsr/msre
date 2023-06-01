@@ -230,7 +230,7 @@ cr3_cell = openmc.Cell(name='CR3', region=cr3_region, fill=control_rod1)
 #Fix control rods initial positions
 start_pos = 19.2 #cm, geometrical distance between lower bottom and starting point
 top_pos = 51 * 2.54 # cm, initial position of control rod1 with respect to start post
-init_pos = 40 * 2.54
+init_pos = 35 * 2.54
 setattr(cr1_cell, 'translation', [0, 0, start_pos + init_pos])
 setattr(cr2_cell, 'translation', [-offset, 0, start_pos + top_pos])
 setattr(cr3_cell, 'translation', [-offset, offset, start_pos + top_pos])
@@ -239,9 +239,9 @@ geometry = openmc.Geometry([core_cell,cr1_cell,cr2_cell,cr3_cell])
 # Settings
 settings = openmc.Settings()
 settings.temperature = {'method':'interpolation','range':(293.15,923.15)}
-settings.batches = 50
+settings.batches = 60
 settings.inactive = 20
-settings.particles = 30000
+settings.particles = 500000
 settings.photon_transport = False
 source_area = openmc.stats.Box([-100., -100., 0.],[ 100.,  100.,  200.],
               only_fissionable = True)
@@ -326,7 +326,7 @@ power = df['Power (MWth)'][:94].values*1000000
 msr_bw_geom = openmc.deplete.msr.MsrBatchwiseGeom(op, model, axis = 2,
                                                   cell_id_or_name = 'CR1',
                                                   bracket = [-2, 5], #cm
-                                                  bracket_limit = [-(19.2+init_pos),(top_pos-init_pos)+19.2], #cm
+                                                  bracket_limit = [0,top_pos+start_pos], #cm
                                                   atom_density_limit = 1e8, #atoms/cm3
                                                   tol = 0.1)
 
@@ -336,10 +336,11 @@ msr_bw_mat = openmc.deplete.msr.MsrBatchwiseMat(op, model,
                                                 bracket = [1e2,1e3], #grams
                                                 bracket_limit = [0,1e5], #grams
                                                 atom_density_limit = 1e8, #atoms/cm3
-                                                tol = 0.01)
+                                                tol = 0.01,
+                                                restart_level = start_pos + init_pos)
 
 # after a refuel, alwyas restarts the water level at 0
-msr_bw = openmc.deplete.msr.MsrBatchwiseComb(msr_bw_geom, msr_bw_mat, start_pos + init_pos )
+msr_bw = openmc.deplete.msr.MsrBatchwiseComb(msr_bw_geom, msr_bw_mat)
 
 integrator = openmc.deplete.CECMIntegrator(op, timesteps=timesteps,
                         msr_continuous=msr,
