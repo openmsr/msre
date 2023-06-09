@@ -228,7 +228,7 @@ cr3_cell = openmc.Cell(name='CR3', region=cr3_region, fill=control_rod1)
 #Fix control rods initial positions
 start_pos = 19.2 #cm, geometrical distance between lower bottom and starting point
 top_pos = 51 * 2.54 # cm, initial position of control rod1 with respect to start post
-init_pos = 40 * 2.54
+init_pos = 35 * 2.54
 setattr(cr1_cell, 'translation', [0, 0, start_pos + init_pos])
 setattr(cr2_cell, 'translation', [-offset, 0, start_pos + top_pos])
 setattr(cr3_cell, 'translation', [-offset, offset, start_pos + top_pos])
