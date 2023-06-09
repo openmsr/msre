@@ -10,8 +10,22 @@ import pandas as pd
 import math
 import numpy as np
 import re
-import onion
 from pathlib import Path
+
+def get_geom_level_from_res(depletion_path, index):
+
+    if depletion_path is None:
+        depletion_path = Path(os.getcwd())
+
+    with h5py.File(depletion_path / 'msr_results.h5','r') as f:
+        items = {}
+        for key in f.keys():
+            if re.split(r'_', key)[0] == 'geometry':
+                items[int(re.split(r'_', key)[1])] = np.array(f.get(key))
+        items = OrderedDict(sorted(items.items()))
+
+        res = list(items.items())[index][1].mean()
+        return res
 
 salt_temp = 648.9
 salt = openmc.Material(name="salt", temperature = salt_temp + 273.15)
@@ -293,7 +307,7 @@ model.plots.append(plot)
 depletion_path = Path(os.getcwd())
 
 cell = model.geometry.get_cells_by_name('CR1')[0]
-last_level = onion.utils.get_geom_level_from_res(depletion_path, index=-1)
+last_level = get_geom_level_from_res(depletion_path, index=-1)
 setattr(cell, 'translation', [0, 0, last_level])
 
 res_path = depletion_path / 'depletion_results.h5'
