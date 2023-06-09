@@ -11,6 +11,7 @@ import math
 import numpy as np
 import re
 from pathlib import Path
+import h5py
 
 def get_geom_level_from_res(depletion_path, index):
 
