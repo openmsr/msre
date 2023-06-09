@@ -10,6 +10,8 @@ import pandas as pd
 import math
 import numpy as np
 import re
+import onion
+from pathlib import Path
 
 salt_temp = 648.9
 salt = openmc.Material(name="salt", temperature = salt_temp + 273.15)
@@ -287,18 +289,25 @@ plot.origin = (5,0,150)
 plot.color_by = 'material'
 plot.colors = colors
 model.plots.append(plot)
-#model.plot_geometry()
 
-#results=model.run()
+depletion_path = Path(os.getcwd())
+
+cell = model.geometry.get_cells_by_name('CR1')[0]
+last_level = onion.utils.get_geom_level_from_res(depletion_path, index=-1)
+setattr(cell, 'translation', [0, 0, last_level])
+
+res_path = depletion_path / 'depletion_results.h5'
+res = openmc.deplete.Results(res_path)
 
 op = openmc.deplete.CoupledOperator(model,
+                                    prev_results = res,
                                     normalization_mode = "energy-deposition")
 
 df=pd.read_excel('MSRE_235_233_Power_History_R24E.xlsx')
 
 #U235
-timesteps = df['Duration (d)'][:94].values
-power = df['Power (MWth)'][:94].values*1000000
+timesteps = df['Duration (d)'][:94].values[len(res):]
+power = df['Power (MWth)'][:94].values[len(res):]*1000000
 
 #Add one further timestep at the end of every power run
 # timesteps_ext = []
@@ -314,6 +323,8 @@ power = df['Power (MWth)'][:94].values*1000000
 #         timesteps_ext.append(1/3600/24)
 #     else:
 #         timesteps_ext.append(timesteps[i])
+
+
 
 integrator = openmc.deplete.CECMIntegrator(op, timesteps=timesteps,
                                            timestep_units='d', power=power)
