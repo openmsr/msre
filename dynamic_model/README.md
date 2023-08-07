@@ -1,6 +1,13 @@
 # Model
 Non-linear dynamic model of the MSRE based on [Singh et al.](https://www.sciencedirect.com/science/article/pii/S030645491730381X). The model uses non-linear neutron kinetic equations, coupled to 1D linear heat transfer equations in order to model reactor dynamics. The neutron kinetics are expressed in terms of fractional power. As described in Singh et al., "The premise is that reactor power is proportional to neutron density, with all other parameters held fixed." The different components of the reactor, namely the core, heat exchanger and radiator are nodalized such that the dynamics of each is governed by its own system of equations, coupled to the other systems by delayed inlet/outlet terms. 
 
+Neutron kinetics are governed by 
+
+```math
+\frac{{dn(t)}}{{dt}} = \frac{{(q(t) - b)}}{{K}} n(t) + \sum_{{i=1}}^6 k_i C_i(t) + S(t)
+
+```
+
 # Method
 The model herein uses SciPy's ODE library. Sample implementation is shown below:
 
