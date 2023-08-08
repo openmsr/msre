@@ -1,14 +1,44 @@
 # Model
-Non-linear dynamic model of the MSRE based on [Singh et al.](https://www.sciencedirect.com/science/article/pii/S030645491730381X). The model uses non-linear neutron kinetic equations, coupled to 1D linear heat transfer equations in order to model reactor dynamics. The neutron kinetics are expressed in terms of fractional power. As described in Singh et al., "The premise is that reactor power is proportional to neutron density, with all other parameters held fixed." The different components of the reactor, namely the core, heat exchanger and radiator are nodalized such that the dynamics of each is governed by its own system of equations, coupled to the other systems by delayed inlet/outlet terms. 
+Non-linear dynamic model of the MSRE based on [Singh et al.](https://www.sciencedirect.com/science/article/pii/S030645491730381X). The model uses a "nodalized" approach, in which the reactor system is composed of coupled subsystems, each of which contain multiple nodes to represent the various dynamics contributing to neutron density (reactor power) and heat transfer.
 
-Neutron kinetics are governed by 
+## Kinetics 
+The neutron kinetics are expressed in terms of fractional power. As described in Singh et al., "The premise is that reactor power is proportional to neutron density, with all other parameters held fixed." In the model herien, kinetics are described by the following set of equations
 
 ```math
-\frac{{dn(t)}}{{dt}} = \frac{{(q(t) - b)}}{{K}} n(t) + \sum_{{i=1}}^6 k_i C_i(t) + S(t)
-
+\begin{equation}
+\frac{{dn(t)}}{{dt}} = \frac{{(\rho(t) - \beta)}}{\Lambda} n(t) + \sum_{{i=1}}^6 k_i C_i(t) + S(t)
+\end{equation}
 ```
 
-# Method
+where $S(t)$ is an external source term, and $C_i(t)$ is the concentration of the $i^{th}$ precursor group (six total for this model) with
+
+```math
+\frac{dC_i(t)}{dt} = \frac{\beta_i}{\Lambda}n(t)-\lambda_i C_i(t) - \frac{C_i(t)}{\tau_C} + \frac{C_i(t - \tau_L) e^{-\lambda_i \tau_L}}{\tau_C}
+```
+
+where $\rho(t)$ is the total reactivity such that 
+
+```math
+\rho(t)=\rho_0+\rho_{fb}(t)+\rho_{ext}
+```
+
+where $\rho_0$ is the reactivity necessary for steady state operation, found by solving the above two equations in the steady state, which yields
+
+```math
+\rho_0 = \beta - \sum_{i=1}^6 \frac{\beta_i}{1+\frac{1}{\lambda_i \tau_C}(1-e^{-\lambda_i \tau_L})}
+```
+
+and $\rho_{ext}$ is external reactivity, e.g. from a reactivity insertion, and $\rho_{fb}$ is the feedback reactivity due to temperature differences in the core nodes, expressed as 
+
+```math
+\rho_{fb}(t) = \alpha_f \sum_{i=1}^{n} I_{fi} (T_{f,0} - T_f(t)) + \alpha_g \sum_{i=1}^{n} I_{gi} (T_{g,0} - T_g(t)), \quad \text{where} \sum_{\text{regions}} I_{fi} = \sum_{\text{regions}} I_{gi} = 1.0
+```
+
+where $\alpha_f$ and $\alpha_g$ are the fuel and graphite temperature-reactivity coefficients respectively, and $I$ represents the weighted nuclear importance factor of each region.
+
+The kinetics are coupled to the heat exchanger node via the feedback reactivity, $\rho_{fb}(t)$, which depends on the temperature of the fuel and graphite nodes, which ultimately depend on the fuel inlet temperature. Note, the differential equation govenring neutron density, $\frac{dn(t)}{dt}$, is nonlinear due to the fact that $n(t)$ is multiplied with $\rho(t)$.
+
+## Method
 The model herein uses SciPy's ODE library. Sample implementation is shown below:
 
 ```python
