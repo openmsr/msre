@@ -8,7 +8,7 @@ The neutron kinetics are expressed in terms of fractional power. As described in
 
 ```math
 \begin{equation}
-\frac{{dn(t)}}{{dt}} = \frac{{(\rho(t) - \beta)}}{\Lambda} n(t) + \sum_{{i=1}}^6 k_i C_i(t) + S(t)
+\frac{{dn(t)}}{{dt}} = \frac{{(\rho(t) - \beta)}}{\Lambda} n(t) + \sum_{{i=1}}^6 \lambda_i C_i(t) + S(t)
 \end{equation}
 ```
 
@@ -33,7 +33,7 @@ where $\rho_0$ is the reactivity necessary for steady state operation, found by 
 and $\rho_{ext}$ is external reactivity, e.g. from a reactivity insertion, and $\rho_{fb}$ is the feedback reactivity due to temperature differences in the core nodes, expressed as 
 
 ```math
-\rho_{fb}(t) = \alpha_f \sum_{i=1}^{n} I_{fi} (T_{f,0} - T_f(t)) + \alpha_g \sum_{i=1}^{n} I_{gi} (T_{g,0} - T_g(t)), \quad \text{where} \sum_{\text{regions}} I_{fi} = \sum_{\text{regions}} I_{gi} = 1.0
+\rho_{fb}(t) = \alpha_f \sum_{i=1}^{n} I_{fi} (T_{f,0} - T_{f_i}(t)) + \alpha_g \sum_{i=1}^{n} I_{gi} (T_{g,0} - T_{g_i}(t)), \quad \text{where} \sum_{\text{regions}} I_{fi} = \sum_{\text{regions}} I_{gi} = 1.0
 ```
 
 where $\alpha_f$ and $\alpha_g$ are the fuel and graphite temperature-reactivity coefficients respectively, and $I$ represents the weighted nuclear importance factor of each region.
