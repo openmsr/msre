@@ -25,7 +25,7 @@ COPY openmc_install_scripts/Debian11/embree-install.sh .
 RUN ./embree-install.sh "$compile_cores"
 
 COPY openmc_install_scripts/Debian11/moab-install.sh .
-RUN ./moab-install.sh "$compile_cores"
+RUN sudo mkdir -p /opt/lib/cmake && sudo ./moab-install.sh "$compile_cores"
 
 COPY openmc_install_scripts/Debian11/double_down-install.sh .
 RUN ./double_down-install.sh "$compile_cores"
