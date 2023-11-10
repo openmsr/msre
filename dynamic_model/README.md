@@ -53,12 +53,26 @@ The equations governing heat transfer contain three terms; a source term and a s
 "Here, $W_f$ is the mass flow rate of fuel salt, $m_{f1}$ and $m_{f2}$ represent the mass of fuel nodes 1 and 2 respectively, $C_{pf}$ represents the fuel salt specific heat capacity, $K_1$ and $K_2$ are the fraction of total power generated in fuel nodes 1 and 2, $K_{g1}$ and $K_{g2}$ represent the fraction of power generated in the graphite transferred to each fuel node, $hA_{fg}$ is the product of area and heat transfer coefficient for the fuel-graphite interface, $P_0$ is the nominal power which multiplied with fractional neutron density n/no gives the instantaneous power, and the $T$s represent the temperatures of the various nodes. Note that the direction of heat transfer depends on the instantaneous temperature of the various nodes." (Singh et. al). 
 
 # Method
-The model herein uses SciPy's ODE library. Sample implementation is shown below:
+The model herein uses [JiTCDDE](https://jitcdde.readthedocs.io/en/stable/), a numerical solver for delayed differential equations. Sample implementation is shown below:
 
 ```python
-backend = 'dopri5'
-r = ode(dydtMSRE).set_integrator(backend,max_step=0.10)
-r.integrate(100.00)
+# instantiate jitcdde object
+DDE = jitcdde([T_out_rc,T_out_air,T_hf1,T_hf2,T_hf3,T_hf4,T_ht1,T_ht2,T_hc1,
+               T_hc2,T_hc3,T_hc4,n,C1,C2,C3,C4,C5,C6,T_cg,T_cf1,T_cf2,rho])
+
+# set initial conditions
+DDE.constant_past([T0_rp, T0_rs, T0_p1,T0_p2, T0_p3, T0_p4, T0_t1, T0_t2, T0_s1, T0_s2, 
+          T0_s3, T0_s4, n_frac0, C0[0], C0[1], C0[2], C0[3], C0[4], C0[5], 
+          T0_g1, T0_f1, T0_f2,rho_initial])
+
+# jitcdde solver parameters 
+t0 = 0.0
+tf = 1000.00
+T = np.arange(t0,tf,0.01)
+
+sol_jit = []
+for t_x in T:
+    sol_jit.append(DDE.integrate(t_x))
 ```
 
-However, since SciPy's ODE library does not support delay differential equations, the delay terms are stored and handled manually. Since the 'dopri5' method uses adaptive time-stepping, linear interpolation is used for approximating the value of the delay terms near the closest timestep to the delay. 
+The [scipyODE_implementation](./scipyODE_implementation/) contains a manual implementation using the `dopri5` method of SciPy's ODE library. However, since SciPy's ODE library does not support delay differential equations, the delay terms are stored and handled manually. Since the 'dopri5' method uses adaptive time-stepping, linear interpolation is used for approximating the value of the delay terms near the closest timestep to the delay. 
