@@ -91,7 +91,8 @@ def dydtMSRE(t,y,delays,rho_ext):
     n*beta[5]/Lam-lam[5]*C6-C6/tau_c+C6_delay*np.exp(-lam[5]*tau_l)/tau_c,                        # C6
     (hA_fg/mcp_g1)*(T_cf1 - T_cg) + k_g*P*n/mcp_g1,                                               # T_cg
     W_f/mn_f*(T_hf4_delay-T_cf1) + (k_f1*P*n/mcp_f1) + (hA_fg*k_1*(T_cg - T_cf1)/mcp_f1),         # T_cf1   
-    W_f/mn_f*(T_cf1 - T_cf2) + (k_f2*P*n/mcp_f2) + (hA_fg*k_2*(T_cg - T_cf1)/mcp_f2)              # T_cf2   
+    W_f/mn_f*(T_cf1 - T_cf2) + (k_f2*P*n/mcp_f2) + (hA_fg*k_2*(T_cg - T_cf1)/mcp_f2),             # T_cf2
+       
     ]
     return dydt
 
@@ -134,7 +135,7 @@ def main():
     # timing parameters
     t0 = 0.0
     t_start = t0
-    t_stop = 5000
+    t_stop = 500.00
 
     # solution 
     sol = []
@@ -223,14 +224,17 @@ def main():
         sol_interim = []
 
         # display progress
-        print(f"{t_start}")
+        #print(f"{t_start}")
 
         i += 1
 
     # plot single parameter
-    of_interest = 14
-    plt.plot([s[0] for s in sol],[s[of_interest] for s in sol])
-    plt.show()
+    #of_interest = 13
+    #ti = [s[0] for s in sol]
+    #oi = [s[of_interest] for s in sol]
+    #print(type(ti[0]))
+    #plt.plot(ti,oi)
+    #plt.show()
 
     # check delay behavior
     # for i in range(len(sol)-1):
