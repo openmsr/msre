@@ -53,7 +53,7 @@ The equations governing heat transfer contain three terms; a source term and a s
 "Here, $W_f$ is the mass flow rate of fuel salt, $m_{f1}$ and $m_{f2}$ represent the mass of fuel nodes 1 and 2 respectively, $C_{pf}$ represents the fuel salt specific heat capacity, $K_1$ and $K_2$ are the fraction of total power generated in fuel nodes 1 and 2, $K_{g1}$ and $K_{g2}$ represent the fraction of power generated in the graphite transferred to each fuel node, $hA_{fg}$ is the product of area and heat transfer coefficient for the fuel-graphite interface, $P_0$ is the nominal power which multiplied with fractional neutron density n/no gives the instantaneous power, and the $T$s represent the temperatures of the various nodes. Note that the direction of heat transfer depends on the instantaneous temperature of the various nodes." (Singh et. al). 
 
 # Method
-The model herein uses [JiTCDDE](https://jitcdde.readthedocs.io/en/stable/), a numerical solver for delayed differential equations. Sample implementation is shown below:
+The model herein uses [JiTCDDE](https://jitcdde.readthedocs.io/en/stable/), a numerical solver for delay-differential equations. Sample implementation is shown below:
 
 ```python
 # instantiate jitcdde object
