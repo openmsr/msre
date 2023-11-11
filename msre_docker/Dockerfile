@@ -28,13 +28,13 @@ COPY openmc_install_scripts/Debian11/moab-install.sh .
 RUN sudo mkdir -p /opt/lib/cmake && sudo ./moab-install.sh "$compile_cores"
 
 COPY openmc_install_scripts/Debian11/double_down-install.sh .
-RUN ./double_down-install.sh "$compile_cores"
+RUN DEBIAN_FRONTEND=noninteractive && sudo ./double_down-install.sh "$compile_cores"
 
 COPY openmc_install_scripts/Debian11/dagmc-install.sh .
-RUN DEBIAN_FRONTEND=noninteractive && ./dagmc-install.sh "$compile_cores"
+RUN DEBIAN_FRONTEND=noninteractive && sudo ./dagmc-install.sh "$compile_cores"
 
 COPY openmc_install_scripts/Debian11/openmc-install.sh .
-RUN DEBIAN_FRONTEND=noninteractive && ./openmc-install.sh "$compile_cores"
+RUN DEBIAN_FRONTEND=noninteractive && sudo ./openmc-install.sh "$compile_cores"
 
 #clean up a bit
 RUN rm *-install.sh
