@@ -35,6 +35,7 @@ RUN DEBIAN_FRONTEND=noninteractive && sudo ./dagmc-install.sh "$compile_cores"
 
 COPY openmc_install_scripts/Debian11/openmc-install.sh .
 RUN DEBIAN_FRONTEND=noninteractive && sudo ./openmc-install.sh "$compile_cores"
+ENV PATH="${PATH}:/usr/local/lib/bin"
 
 #clean up a bit
 RUN rm *-install.sh
