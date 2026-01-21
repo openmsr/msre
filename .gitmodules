@@ -1,0 +1,3 @@
+[submodule "msre_docker/openmc_install_scripts"]
+	path = msre_docker/openmc_install_scripts
+	url = git@github.com:bvhoof/openmc_install_scripts.git
